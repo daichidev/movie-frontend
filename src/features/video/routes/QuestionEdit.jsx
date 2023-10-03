@@ -10,6 +10,7 @@ import { Modal } from "react-bootstrap";
 import { ModalButton } from "../../../components/Elements/ModalButton";
 import { KanjiText } from "../../../components/Elements/CustomText";
 import ReactPlayer from "react-player";
+import VTTFILE from "../../../assets/1.vtt";
 
 export const QuestionEdit = () => {
   const { videoId, isTyping } = useParams();
@@ -53,6 +54,7 @@ export const QuestionEdit = () => {
                   src="https://s3.ap-northeast-1.amazonaws.com/mastercode.jp-movie-react/input/123.mov"
                   type="video/mp4"
                 />
+                <track default src={VTTFILE}></track>
               </video>
             </div>
           </div>

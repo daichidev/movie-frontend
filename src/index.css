@@ -1,6 +1,28 @@
+@font-face {
+    font-family: 'Honoka';
+    src: url('/public/fonts/Honoka-Shin-Maru-Gothic_R.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+/* @font-face {
+    font-family: 'Honoka';
+    src: url('/public/fonts/Homoka.otf');
+} */
+
+/* @font-face {
+    font-family: 'SUNRIZE';
+    src: url('../public/fonts/SUNRIZE.ttf') format('truetype');
+} */
+
 body {
     font-family: 'Noto Sans JP', sans-serif; 
 }
+/* 
+body {
+    font-family: 'Honoka', sans-serif;
+} */
+
 #root {
     width: 100vw;
     height: 100vh;
@@ -39,9 +61,5 @@ body {
     margin-left: 4rem;
 }
 .custom-font {
-    font-family: 'SUNRIZE', sans-serif;
-}
-@font-face {
-    font-family: 'SUNRIZE';
-    src: url('../public/fonts/SUNRIZE.ttf') format('truetype');
+    font-family: 'Honoka', sans-serif;
 }

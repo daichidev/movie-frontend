@@ -1,0 +1,130 @@
+@mixin flexDiv {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+::cue {
+  color: white;
+  font-family: 'Yu Gothic', 'YuGothic', 'ヒラギノ角ゴ ProN', 'Hiragino Kaku Gothic ProN', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif; 
+  font-weight: bold; 
+  background-color: black;
+}
+
+// font-family: 'Yu Gothic', 'YuGothic', 'ヒラギノ角ゴ ProN', 'Hiragino Kaku Gothic ProN', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif; 
+
+
+::cue(ruby) { 
+  background-color: black;
+  font-size: 2rem; 
+}
+
+h2 {
+  align-self: center;
+}
+
+button {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+input[type='file'] {
+  display: none;
+}
+
+#fileLabel {
+  height: 3rem;
+  background-color: #007bff;
+  padding: 10px;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  margin-right: 2rem;
+}
+
+.upload-container {
+  width: 35vw;
+  height: 100vh;
+  margin: 5rem auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+
+  .upload-title {
+    @include flexDiv();
+    padding: 1rem;
+    label {
+      font-size: 1rem;
+      width: 28%;
+    }
+    input {
+      width: 72%;
+    }
+    div {
+      width: 72%;
+      div {
+        width: 100%
+      }
+    }
+  }
+  
+  .upload-content {
+    @include flexDiv();
+    padding: 1rem;
+    label {
+      font-size: 1rem;
+      width: 28%;
+    }
+    textarea {
+      width: 72%;
+    }
+  }
+
+  .upload-file {
+    @include flexDiv();
+    padding: 1rem;
+    height: 6rem;
+    input {
+      width: 65%;
+    }
+  }
+  .upload-button {
+    @include flexDiv();
+    justify-content: flex-end;
+    align-self: flex-end;
+    height: 3rem;
+    padding: 3rem 1rem;
+    button {
+      width: 14rem;
+      background-color: green;
+    }
+  }
+}
+  .custom-file-input::-webkit-file-upload-button {
+        visibility: hidden; 
+  }
+
+  #side-bar {
+    background-color: #c8c8c8;
+    h2 {
+      font-size: 1.5rem;
+    }
+    span {
+      font-size: 1rem;
+    }
+  }
+
+  .custom-table {
+    width: 100%;
+    padding: 2rem;
+  }
+
+  .video-content {
+    
+  }

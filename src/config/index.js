@@ -40,6 +40,59 @@ export const dummyVideoData = [
     useQuestion: false,
   },
 ];
+
+export const dummyVideoDataForClassic = [
+  {
+    id: 1,
+    title: "万葉集",
+    content:
+      "••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••",
+    useStamp: true,
+    useQuestion: false,
+    isClassic: true,
+    classicType: "和歌",
+  },
+  {
+    id: 2,
+    title: "古今和哥集",
+    content:
+      "••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••",
+    useStamp: true,
+    useQuestion: true,
+    isClassic: true,
+    classicType: "和歌",
+  },
+  {
+    id: 3,
+    title: "江戸俳句",
+    content:
+      "••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••",
+    useStamp: false,
+    useQuestion: false,
+    isClassic: true,
+    classicType: "俳句",
+  },
+  {
+    id: 4,
+    title: "万葉集",
+    content:
+      "•••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••",
+    useStamp: false,
+    useQuestion: false,
+    isClassic: true,
+    classicType: "和歌",
+  },
+  {
+    id: 5,
+    title: "万葉集",
+    content:
+      "•••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••",
+    useStamp: false,
+    useQuestion: false,
+    isClassic: true,
+    classicType: "和歌",
+  },
+];
 export const dummyWordData = [
   "ちえ",
   "しぼむ",
@@ -80,4 +133,40 @@ export const isNumber = (value) => {
 export const isKanji = (char) => {
   const code = char.charCodeAt(0);
   return code >= 0x4c00 && code <= 0x9faf;
+};
+
+const _tagProcessor = (values) => {
+  let processed = "";
+  for (const value of values) {
+    const splitted = value.split("《");
+    if (splitted.length === 1) {
+      processed += splitted[0];
+    } else {
+      const kanji = splitted[0];
+      const rubyChunk = splitted[1];
+      const evened = rubyChunk.replaceAll(" ", "　");
+      const rubies = evened.split("　");
+      if (kanji.length === rubies.length) {
+        const qty = rubies.length;
+        for (let index = 0; index < qty; index++) {
+          processed += `<ruby>${kanji[index]}<rt class="optional">${rubies[index]}</rtstyle=></ruby>`;
+        }
+      } else {
+        processed += `<ruby>${kanji}<rt class="optional">${rubies.join()}</rt></ruby>`;
+      }
+    }
+  }
+  return processed;
+};
+
+export const convertRuby = (val) => {
+  const boxes = [];
+  const splitted = val.split("〓");
+  for (const element of splitted) {
+    const twoStaged = element.split("》");
+    for (const element of twoStaged) {
+      boxes.push(element);
+    }
+  }
+  return _tagProcessor(boxes);
 };

@@ -1,5 +1,5 @@
 import { isNumber } from "../../config";
-import { KanjiText } from "./CustomText";
+import { ExtendedKanjiText, KanjiText } from "./CustomText";
 
 export const Title = ({ title }) => {
   const newTitle = parseInt(title);
@@ -16,7 +16,7 @@ export const Title = ({ title }) => {
             )}
           </>
         ) : (
-          <>{title}</>
+          <ExtendedKanjiText text={title}></ExtendedKanjiText>
         )}
       </span>
     </div>

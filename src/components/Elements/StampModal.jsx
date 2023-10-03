@@ -2,7 +2,12 @@ import { Modal } from "react-bootstrap";
 import { ModalButton } from "./ModalButton";
 import { KanjiText } from "./CustomText";
 
-export const StampModal = ({ showModal, onClose }) => {
+export const StampModal = ({ showModal, onClose, onClear }) => {
+  const handleClear = () => {
+    onClear();
+    onClose();
+  };
+
   return (
     <Modal
       show={showModal}
@@ -32,7 +37,7 @@ export const StampModal = ({ showModal, onClose }) => {
             </>
           }
           isConfirm={true}
-          onClick={onClose}
+          onClick={handleClear}
         />
         <ModalButton
           children={

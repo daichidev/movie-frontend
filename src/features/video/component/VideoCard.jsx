@@ -8,6 +8,8 @@ export const VideoCard = ({
   useStamp,
   useQuestion,
   videoId,
+  isClassic,
+  classicType,
 }) => {
   const navigate = useNavigate();
   const goDetail = () => {
@@ -22,6 +24,7 @@ export const VideoCard = ({
       onClick={goDetail}
     >
       <div className="video-title">
+        {isClassic ? <span className="classic-type">{classicType}</span> : ""}
         <span>{title}</span>
       </div>
       <div className="video-content">

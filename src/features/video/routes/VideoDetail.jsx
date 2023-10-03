@@ -35,28 +35,53 @@ export const VideoDetail = () => {
   const [stmpGraph, setStmpGraph] = useState(false);
   const [stampHeaderStr, setStampHeaderStr] = useState(null);
 
+  const [normalCount, setNormalCount] = useState(0);
+  const [goodCount, setGoodCount] = useState(0);
+  const [bestCount, setBestCount] = useState(0);
+
+  const [normalStamps, setNormalStamps] = useState([]);
+  const [goodStamps, setGoodStamps] = useState([]);
+  const [bestStamps, setBestStamps] = useState([]);
+
   const textRef = useRef(null);
   const chapterRef = useRef(null);
+  const videoRef = useRef(null);
 
   const openQuestionModal = () => {
     setShowQuestionModal(true);
   };
+
   const closeQuestionModal = () => {
     setShowQuestionModal(false);
   };
+
   const openWordModal = (word) => {
     setShowWordModal(true);
     setWord(word);
   };
+
   const closeWordModal = () => {
     setShowWordModal(false);
   };
+
   const closeStmpClearModal = () => {
     setStmpClear(false);
   };
+
+  const clearStmpModal = () => {
+    setNormalCount(0);
+    setGoodCount(0);
+    setBestCount(0);
+
+    setNormalStamps([]);
+    setGoodStamps([]);
+    setBestStamps([]);
+  };
+
   const closeInputSelModal = () => {
     setInputSel(false);
   };
+
   const handleStamps = (self) => {
     setChpList(false);
     self ? setStmpList(true) : setStmpGraph(true);
@@ -82,6 +107,42 @@ export const VideoDetail = () => {
     setStampHeaderStr(headerStr);
   };
 
+  const handleNormalClick = () => {
+    if (normalCount < 3) {
+      setNormalCount(normalCount + 1);
+      const currentTIme = getCurrentTime();
+      console.log("currentTime", currentTIme);
+      setNormalStamps([...normalStamps, currentTIme]);
+      console.log("normalStamps", normalStamps);
+    }
+  };
+
+  const handleGoodClick = () => {
+    if (goodCount < 3) {
+      setGoodCount(goodCount + 1);
+      const currentTIme = getCurrentTime();
+      setGoodStamps([...goodStamps, currentTIme]);
+    }
+  };
+
+  const handleBestClick = () => {
+    if (bestCount < 3) {
+      setBestCount(bestCount + 1);
+      const currentTIme = getCurrentTime();
+      setBestStamps([...bestStamps, currentTIme]);
+    }
+  };
+
+  const getCurrentTime = () => {
+    const time = videoRef.current.getCurrentTime();
+    const hours = Math.floor(time / 3600);
+    const minutes = Math.floor((time % 3600) / 60);
+    const seconds = Math.floor(time % 60);
+    return `${hours.toString().padStart(2, 0)}:${minutes
+      .toString()
+      .padStart(2, 0)}:${seconds.toString().padStart(2, 0)}`;
+  };
+
   return (
     <MainLayout>
       <Header />
@@ -89,9 +150,21 @@ export const VideoDetail = () => {
         <div className="stamp">
           <div className="row">
             <div className="col-6">
-              <StampButton StampImg={StampNormalImg} count={1}></StampButton>
-              <StampButton StampImg={StampGoodImg}></StampButton>
-              <StampButton StampImg={StampBestImg} count={3}></StampButton>
+              <StampButton
+                StampImg={StampNormalImg}
+                count={normalCount}
+                onClick={handleNormalClick}
+              ></StampButton>
+              <StampButton
+                StampImg={StampGoodImg}
+                count={goodCount}
+                onClick={handleGoodClick}
+              ></StampButton>
+              <StampButton
+                StampImg={StampBestImg}
+                count={bestCount}
+                onClick={handleBestClick}
+              ></StampButton>
               <div
                 className="chapter"
                 ref={chapterRef}
@@ -154,9 +227,21 @@ export const VideoDetail = () => {
                     </div>
                     <div className="stamp-body">
                       <div className="stampcard-list">
-                        <StampCard stampImg={StampNormalImg} stampCount={1} />
-                        <StampCard stampImg={StampGoodImg} />
-                        <StampCard stampImg={StampBestImg} stampCount={2} />
+                        <StampCard
+                          stampImg={StampNormalImg}
+                          stampCount={normalCount}
+                          stamps={normalStamps}
+                        />
+                        <StampCard
+                          stampImg={StampGoodImg}
+                          stampCount={goodCount}
+                          stamps={goodStamps}
+                        />
+                        <StampCard
+                          stampImg={StampBestImg}
+                          stampCount={bestCount}
+                          stamps={bestStamps}
+                        />
                       </div>
                       <div
                         className="btn-clear"
@@ -185,12 +270,14 @@ export const VideoDetail = () => {
             </div>
           </div>
         </div>
+        {/* https://s3.ap-northeast-1.amazonaws.com/mastercode.jp-movie-react/output/test/123123modifier.m3u8 */}
         <div className="video">
           <div className="row">
             <div className="col-6 video-box">
               <ReactPlayer
+                ref={videoRef}
                 url={
-                  "https://s3.ap-northeast-1.amazonaws.com/mastercode.jp-movie-react/output/test/123123modifier.m3u8"
+                  "https://s3.ap-northeast-1.amazonaws.com/mastercode.jp-movie-react/output/test/123caption.m3u8"
                 }
                 id="MainPlay"
                 loop
@@ -293,7 +380,11 @@ export const VideoDetail = () => {
         />
       </div>
       <div className="modal-stamp">
-        <StampModal showModal={stmpClear} onClose={closeStmpClearModal} />
+        <StampModal
+          showModal={stmpClear}
+          onClose={closeStmpClearModal}
+          onClear={clearStmpModal}
+        />
       </div>
       <div className="modal-input-sel">
         <InputSelectionModal
