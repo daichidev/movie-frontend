@@ -1,15 +1,16 @@
 import { ApiProvider } from "@reduxjs/toolkit/dist/query/react";
-import { apiSlice } from "./features/api/api-slice";
+import { Provider } from "react-redux";
+import { store } from "./stores/store";
 import { AppRoutes } from "./routes";
 import { BrowserRouter } from "react-router-dom";
 
 function App() {
   return (
-    <ApiProvider api={apiSlice}>
+    <Provider store={store}>
       <BrowserRouter basename="movie">
         <AppRoutes></AppRoutes>
       </BrowserRouter>
-    </ApiProvider>
+    </Provider>
   );
 }
 

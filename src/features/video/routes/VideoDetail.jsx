@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faNavicon } from "@fortawesome/free-solid-svg-icons";
 import { dummyWordData } from "../../../config";
 import { WordCard } from "../component/WordCard";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { QuestionModal } from "../../../components/Elements/QuestionModal";
 import { WordModal } from "../../../components/Elements/WordModal";
 import { Overlay } from "react-bootstrap";
@@ -22,8 +22,16 @@ import { InputSelectionModal } from "../../../components/Elements/InputSelection
 import { BarChart } from "../component/BarChart";
 import { KanjiText } from "../../../components/Elements/CustomText";
 import ReactPlayer from "react-player";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setVideoNormalCount,
+  setVideoGoodCount,
+  setVideoBestCount,
+} from "../../../stores/store";
 
 export const VideoDetail = () => {
+  const dispatch = useDispatch();
+
   const { videoId } = useParams();
   const [showQuestionModal, setShowQuestionModal] = useState(false);
   const [showWordModal, setShowWordModal] = useState(false);
@@ -42,6 +50,20 @@ export const VideoDetail = () => {
   const [normalStamps, setNormalStamps] = useState([]);
   const [goodStamps, setGoodStamps] = useState([]);
   const [bestStamps, setBestStamps] = useState([]);
+
+  const videoState = useSelector((state) => state.videos[videoId]);
+
+  useEffect(() => {
+    if (videoState) {
+      setNormalCount(videoState.normalCount);
+      setGoodCount(videoState.goodCount);
+      setBestCount(videoState.bestCount);
+
+      setNormalStamps(videoState.normalStamps);
+      setGoodStamps(videoState.goodStamps);
+      setBestStamps(videoState.bestStamps);
+    }
+  }, []);
 
   const textRef = useRef(null);
   const chapterRef = useRef(null);
@@ -69,6 +91,10 @@ export const VideoDetail = () => {
   };
 
   const clearStmpModal = () => {
+    dispatch(setVideoNormalCount({ videoId: videoId, count: 0, stamps: [] }));
+    dispatch(setVideoGoodCount({ videoId: videoId, count: 0, stamps: [] }));
+    dispatch(setVideoBestCount({ videoId: videoId, count: 0, stamps: [] }));
+
     setNormalCount(0);
     setGoodCount(0);
     setBestCount(0);
@@ -109,27 +135,52 @@ export const VideoDetail = () => {
 
   const handleNormalClick = () => {
     if (normalCount < 3) {
-      setNormalCount(normalCount + 1);
+      let payload = normalCount + 1;
+      setNormalCount(payload);
       const currentTIme = getCurrentTime();
       console.log("currentTime", currentTIme);
       setNormalStamps([...normalStamps, currentTIme]);
       console.log("normalStamps", normalStamps);
+      dispatch(
+        setVideoNormalCount({
+          videoId: videoId,
+          count: payload,
+          stamps: [...normalStamps, currentTIme],
+        })
+      );
     }
   };
 
   const handleGoodClick = () => {
     if (goodCount < 3) {
-      setGoodCount(goodCount + 1);
+      let payload = goodCount + 1;
+      setGoodCount(payload);
       const currentTIme = getCurrentTime();
       setGoodStamps([...goodStamps, currentTIme]);
+      dispatch(
+        setVideoGoodCount({
+          videoId: videoId,
+          count: payload,
+          stamps: [...goodStamps, currentTIme],
+        })
+      );
     }
   };
 
   const handleBestClick = () => {
     if (bestCount < 3) {
-      setBestCount(bestCount + 1);
+      let payload = bestCount + 1;
+
+      setBestCount(payload);
       const currentTIme = getCurrentTime();
       setBestStamps([...bestStamps, currentTIme]);
+      dispatch(
+        setVideoBestCount({
+          videoId: videoId,
+          count: payload,
+          stamps: [...bestStamps, currentTIme],
+        })
+      );
     }
   };
 
@@ -277,7 +328,7 @@ export const VideoDetail = () => {
               <ReactPlayer
                 ref={videoRef}
                 url={
-                  "https://s3.ap-northeast-1.amazonaws.com/mastercode.jp-movie-react/output/test/123caption.m3u8"
+                  "https://s3.ap-northeast-1.amazonaws.com/mastercode.jp-movie-react/input/123.mov"
                 }
                 id="MainPlay"
                 loop
@@ -328,7 +379,7 @@ export const VideoDetail = () => {
         <div className="question">
           <div className="row">
             <div className="col-12 question-title">
-              <div className="col-10 left">
+              <div className="col-11 left">
                 <button>
                   <>
                     <KanjiText title={"問"} pronun={"と"} />
@@ -337,11 +388,13 @@ export const VideoDetail = () => {
                   <br />
                   ボックス
                 </button>
+                {/* <div> */}
                 <span>
-                  しりょうを見て どんなことを 思いましたか。書いてみましょう。
+                  どうがを見て どんなことを思いましたか。書いてみましょう。
                 </span>
+                {/* </div> */}
               </div>
-              <div className="col-2 right">
+              <div className="col-1 right">
                 <div>
                   <span>教師用</span>
                   <button onClick={openQuestionModal}>

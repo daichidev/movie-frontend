@@ -170,3 +170,21 @@ export const convertRuby = (val) => {
   }
   return _tagProcessor(boxes);
 };
+
+export const get2byteLength = (str) => {
+  let count = 0;
+
+  for (let i = 0, len = str.length; i < len; i++) {
+    let c = str.charCodeAt(i);
+
+    if (!str[i].match(/\r?\n/g)) {
+      if (c >= 0x0 && c <= 0x7f) {
+        count += 0.5;
+      } else {
+        count += 1;
+      }
+    }
+  }
+
+  return count;
+};

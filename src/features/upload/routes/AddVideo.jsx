@@ -10,9 +10,15 @@ import { RubyField } from "../component/rubyfield";
 import { default as JsxParser } from "html-react-parser";
 import useStateEx from "../../../utils/useStateEx";
 import { makeStyles } from "@material-ui/core/styles";
+import {
+  useGetCategoriesQuery,
+  useGetGradesQuery,
+  useGetUnitsQuery,
+} from "../../api/api-slice";
 
 function AddVideoScreen() {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedCaptionFile, setSelectedCaptionFile] = useState(null);
   const [title, setTitle] = useState(null);
   const [content, setContent] = useState(null);
   const [responseText, setResponseText] = useState("");
@@ -60,6 +66,8 @@ function AddVideoScreen() {
           const b = value;
           const c = temp.slice(selectionEnd_);
           setVideoTitle(a + b + c);
+          setSelectionStart(selectionStart_ + b.length);
+          setSelectionEnd(selectionEnd_ + b.length);
         }
       });
     }
@@ -83,18 +91,48 @@ function AddVideoScreen() {
     }
   };
 
-  const [category, setCategory] = React.useState("placeholder");
+  const handleCaptionFileChange = (event) => {
+    const file = event.target.files[0];
+    const fileLabel = document.getElementById("selectedCaptionLabel");
+    if (file !== null && file !== undefined) {
+      let fileName = file.name;
+      fileLabel.textContent = fileName;
+      setSelectedCaptionFile(file);
+    } else {
+      setSelectedCaptionFile(file);
+      fileLabel.textContent = "ファイルを選択してください。";
+    }
+  };
+
+  const [category, setCategory] = React.useState(0);
   const handleCategory = (event) => {
     setCategory(event.target.value);
   };
-  const [grade, setGrade] = React.useState("placeholder");
+  const [grade, setGrade] = React.useState(0);
   const handleGrade = (event) => {
     setGrade(event.target.value);
   };
-  const [classroom, setClassroom] = React.useState("placeholder");
+  const [classroom, setClassroom] = React.useState(0);
   const handleClassroom = (event) => {
     setClassroom(event.target.value);
   };
+
+  const { data: categoriesData } = useGetCategoriesQuery();
+  console.log("categories", categoriesData);
+  const { data: gradesData, refetch: refetchGrades } =
+    useGetGradesQuery(category);
+  console.log("gradesData", gradesData);
+  const { data: unitsData, refetch: refetchUnits } = useGetUnitsQuery(grade);
+  console.log("unitsData", unitsData);
+
+  const refetchData = () => {
+    refetchGrades();
+    refetchUnits();
+  };
+
+  useEffect(() => {
+    refetchData();
+  }, [category, grade]);
 
   const handleChange = (event) => {
     const title = event.target.value;
@@ -109,9 +147,16 @@ function AddVideoScreen() {
   const handleUpload = () => {
     if (selectedFile) {
       console.log("Uploading file:", selectedFile);
+      let video_title = document.getElementById("video-title").value;
+      let video_content = document.getElementById("video-content").value;
       const formData = new FormData();
-      formData.append("video", selectedFile, selectedFile.name);
-      formData.append("title", title);
+      formData.append("media", selectedFile, selectedFile.name);
+      formData.append("caption", selectedCaptionFile, selectedCaptionFile.name);
+      formData.append("title", video_title);
+      formData.append("content", video_content);
+      formData.append("category", category);
+      formData.append("grade", grade);
+      formData.append("unit", classroom);
 
       setIsLoading(false);
       fetch("http://127.0.0.1:8000/videos/", {
@@ -124,7 +169,8 @@ function AddVideoScreen() {
             return response.json();
           }
           //   toast.warn("アップロードに失敗しました!");
-          toast.success("アップロードに成功しました！");
+          // toast.success("アップロードに成功しました！");
+          console.log("what is error: ", response);
 
           throw new Error("Network response was not ok");
         })
@@ -138,8 +184,8 @@ function AddVideoScreen() {
           console.error("Upload error:", error);
           setIsLoading(true);
           setResponseText(error);
-          //   toast.warn("アップロードに失敗しました!");
-          toast.success("アップロードに成功しました！");
+          toast.warn("アップロードに失敗しました!");
+          // toast.success("アップロードに成功しました！");
         });
     } else {
       alert("アップロードするファイルを選択してください。");
@@ -219,106 +265,340 @@ function AddVideoScreen() {
                     value={category}
                     onChange={handleCategory}
                   >
-                    <MenuItem value={"placeholder"}>
-                      選択してください。
-                    </MenuItem>
-                    <MenuItem value={"10"}>辞書</MenuItem>
-                    <MenuItem value={"20"}>計算スキル</MenuItem>
+                    <MenuItem value={0}>選択してください。</MenuItem>
+                    {categoriesData !== undefined &&
+                      categoriesData.map((element) => (
+                        <MenuItem key={element.id} value={element.id}>
+                          {element.name}
+                        </MenuItem>
+                      ))}
                   </Select>
                 </div>
               </div>
-              <div className="upload-title">
-                <label>学年</label>
-                <div>
-                  <Select
-                    labelId="grade-label"
-                    id="grade"
-                    value={grade}
-                    onChange={handleGrade}
-                  >
-                    <MenuItem value={"placeholder"}>
-                      選択してください。
-                    </MenuItem>
-                    <MenuItem value={10}>1年</MenuItem>
-                    <MenuItem value={20}>2年</MenuItem>
-                    <MenuItem value={30}>3年</MenuItem>
-                    <MenuItem value={40}>4年</MenuItem>
-                    <MenuItem value={50}>5年</MenuItem>
-                    <MenuItem value={60}>6年</MenuItem>
-                  </Select>
+              {category > 0 ? (
+                <div style={{ width: "100%" }}>
+                  <div className="upload-title">
+                    <label>学年</label>
+                    <div>
+                      <Select
+                        labelId="grade-label"
+                        id="grade"
+                        value={grade}
+                        onChange={handleGrade}
+                      >
+                        <MenuItem value={0}>選択してください。</MenuItem>
+                        {gradesData !== undefined &&
+                          gradesData.map((element) => (
+                            <MenuItem value={element.id}>
+                              {element.level}
+                            </MenuItem>
+                          ))}
+                      </Select>
+                    </div>
+                  </div>
+                  <div className="upload-title">
+                    <label>単元名</label>
+                    <div>
+                      <Select
+                        labelId="classroom-label"
+                        id="classroom"
+                        value={classroom}
+                        onChange={handleClassroom}
+                      >
+                        <MenuItem value={"placeholder"}>
+                          選択してください。
+                        </MenuItem>
+                        {unitsData !== undefined &&
+                          unitsData.map((element) => (
+                            <MenuItem value={element.id}>
+                              {element.name}
+                            </MenuItem>
+                          ))}
+                      </Select>
+                    </div>
+                  </div>
+                  {category === 1 ? (
+                    <>
+                      <div className="upload-title">
+                        <label>計算スキル用①</label>
+                        <div>
+                          <Select
+                            labelId="classroom-label"
+                            id="classroom"
+                            value={classroom}
+                            onChange={handleClassroom}
+                          >
+                            <MenuItem value={"placeholder"}>
+                              選択してください。
+                            </MenuItem>
+                            {unitsData !== undefined &&
+                              unitsData.map((element) => (
+                                <MenuItem value={element.id}>
+                                  {element.name}
+                                </MenuItem>
+                              ))}
+                          </Select>
+                        </div>
+                      </div>
+                      <div className="upload-title">
+                        <label>計算スキル用②</label>
+                        <div>
+                          <Select
+                            labelId="classroom-label"
+                            id="classroom"
+                            value={classroom}
+                            onChange={handleClassroom}
+                          >
+                            <MenuItem value={"placeholder"}>
+                              選択してください。
+                            </MenuItem>
+                            {unitsData !== undefined &&
+                              unitsData.map((element) => (
+                                <MenuItem value={element.id}>
+                                  {element.name}
+                                </MenuItem>
+                              ))}
+                          </Select>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+
+                  {category === 3 ? (
+                    <>
+                      <div className="upload-title">
+                        <label>漢字スキル用①</label>
+                        <div>
+                          <Select
+                            labelId="classroom-label"
+                            id="classroom"
+                            value={classroom}
+                            onChange={handleClassroom}
+                          >
+                            <MenuItem value={"placeholder"}>
+                              選択してください。
+                            </MenuItem>
+                            {unitsData !== undefined &&
+                              unitsData.map((element) => (
+                                <MenuItem value={element.id}>
+                                  {element.name}
+                                </MenuItem>
+                              ))}
+                          </Select>
+                        </div>
+                      </div>
+                      <div className="upload-title">
+                        <label>漢字スキル用②</label>
+                        <div>
+                          <Select
+                            labelId="classroom-label"
+                            id="classroom"
+                            value={classroom}
+                            onChange={handleClassroom}
+                          >
+                            <MenuItem value={"placeholder"}>
+                              選択してください。
+                            </MenuItem>
+                            {unitsData !== undefined &&
+                              unitsData.map((element) => (
+                                <MenuItem value={element.id}>
+                                  {element.name}
+                                </MenuItem>
+                              ))}
+                          </Select>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                  {category === 4 ? (
+                    <>
+                      <div className="upload-title">
+                        <label>トモプラ用①</label>
+                        <div>
+                          <Select
+                            labelId="classroom-label"
+                            id="classroom"
+                            value={classroom}
+                            onChange={handleClassroom}
+                          >
+                            <MenuItem value={"placeholder"}>
+                              選択してください。
+                            </MenuItem>
+                            {unitsData !== undefined &&
+                              unitsData.map((element) => (
+                                <MenuItem value={element.id}>
+                                  {element.name}
+                                </MenuItem>
+                              ))}
+                          </Select>
+                        </div>
+                      </div>
+                      <div className="upload-title">
+                        <label>トモプラ用②</label>
+                        <div>
+                          <Select
+                            labelId="classroom-label"
+                            id="classroom"
+                            value={classroom}
+                            onChange={handleClassroom}
+                          >
+                            <MenuItem value={"placeholder"}>
+                              選択してください。
+                            </MenuItem>
+                            {unitsData !== undefined &&
+                              unitsData.map((element) => (
+                                <MenuItem value={element.id}>
+                                  {element.name}
+                                </MenuItem>
+                              ))}
+                          </Select>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                  <div className="upload-content">
+                    <label>映像のタイトル</label>
+                    <div style={{ width: "72%" }}>
+                      <RubyField
+                        id="video-title-temp"
+                        onConfirmed={_onConfirmedTitle}
+                        inputProps={{ maxLength: 32 }}
+                        fullWidth
+                      />
+                      <TextField
+                        id="video-title"
+                        value={videoTitle}
+                        onChange={_onChangeTitle}
+                        multiline
+                        fullWidth
+                      />
+                    </div>
+                  </div>
+                  <div className="upload-content video-content">
+                    <label>映像の説明文</label>
+                    <div style={{ width: "72%" }}>
+                      <RubyField
+                        id="video-content-temp"
+                        onConfirmed={_onConfirmed}
+                        inputProps={{ maxLength: 32 }}
+                        fullWidth
+                      />
+                      <TextField
+                        id="video-content"
+                        value={videoContent}
+                        onChange={_onChangeCategoryName}
+                        multiline
+                        fullWidth
+                      />
+                    </div>
+                  </div>
+                  {category === 2 ? (
+                    <>
+                      <div className="upload-title">
+                        <label>辞書用①</label>
+                        <div>
+                          <Select
+                            labelId="classroom-label"
+                            id="classroom"
+                            value={classroom}
+                            onChange={handleClassroom}
+                          >
+                            <MenuItem value={"placeholder"}>
+                              選択してください。
+                            </MenuItem>
+                            {unitsData !== undefined &&
+                              unitsData.map((element) => (
+                                <MenuItem value={element.id}>
+                                  {element.name}
+                                </MenuItem>
+                              ))}
+                          </Select>
+                        </div>
+                      </div>
+                      <div className="upload-title">
+                        <label>辞書用②</label>
+                        <div>
+                          <Select
+                            labelId="classroom-label"
+                            id="classroom"
+                            value={classroom}
+                            onChange={handleClassroom}
+                          >
+                            <MenuItem value={"placeholder"}>
+                              選択してください。
+                            </MenuItem>
+                            {unitsData !== undefined &&
+                              unitsData.map((element) => (
+                                <MenuItem value={element.id}>
+                                  {element.name}
+                                </MenuItem>
+                              ))}
+                          </Select>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                  {/* {category === 2 ? (
+                    <div className="upload-content video-content">
+                      <label>問いボックス</label>
+                      <div style={{ width: "72%" }}>
+                        <RubyField
+                          id="video-content-temp"
+                          onConfirmed={_onConfirmed}
+                          inputProps={{ maxLength: 32 }}
+                          fullWidth
+                        />
+                        <TextField
+                          id="video-content"
+                          value={videoContent}
+                          onChange={_onChangeCategoryName}
+                          multiline
+                          fullWidth
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <></>
+                  )} */}
+                  <div className="upload-file">
+                    <input
+                      type="file"
+                      title=" "
+                      id="inputFile"
+                      onChange={handleFileChange}
+                    />
+                    <label for="inputFile" id="fileLabel">
+                      映像ファイル
+                    </label>
+                    <label id="selectedLabel">選択してください。</label>
+                  </div>
+                  <div className="upload-file">
+                    <input
+                      type="file"
+                      title=" "
+                      id="inputCaptionFile"
+                      onChange={handleCaptionFileChange}
+                    />
+                    <label for="inputCaptionFile" id="captionFileLabel">
+                      字幕ファイル
+                    </label>
+                    <label id="selectedCaptionLabel">選択してください。</label>
+                  </div>
+                  <div className="upload-button">
+                    <button onClick={handleUpload}>アップロード</button>
+                  </div>
                 </div>
-              </div>
-              <div className="upload-title">
-                <label>単元名</label>
-                <div>
-                  <Select
-                    labelId="classroom-label"
-                    id="classroom"
-                    value={classroom}
-                    onChange={handleClassroom}
-                  >
-                    <MenuItem value={"placeholder"}>
-                      選択してください。
-                    </MenuItem>
-                    <MenuItem value={10}>はるの おとずれと フキノトウ</MenuItem>
-                    <MenuItem value={20}>たんぽぽの ひみつ</MenuItem>
-                    <MenuItem value={30}>
-                      どうぶつ園の じゅういの しごと
-                    </MenuItem>
-                  </Select>
-                </div>
-              </div>
-              <div className="upload-content">
-                <label>映像のタイトル</label>
-                <div style={{ width: "72%" }}>
-                  <RubyField
-                    id="video-title-temp"
-                    onConfirmed={_onConfirmedTitle}
-                    inputProps={{ maxLength: 32 }}
-                    fullWidth
-                  />
-                  <TextField
-                    id="video-title"
-                    value={videoTitle}
-                    onChange={_onChangeTitle}
-                    multiline
-                    fullWidth
-                  />
-                </div>
-              </div>
-              <div className="upload-content video-content">
-                <label>映像の説明文</label>
-                <div style={{ width: "72%" }}>
-                  <RubyField
-                    id="video-content-temp"
-                    onConfirmed={_onConfirmed}
-                    inputProps={{ maxLength: 32 }}
-                    fullWidth
-                  />
-                  <TextField
-                    id="video-content"
-                    value={videoContent}
-                    onChange={_onChangeCategoryName}
-                    multiline
-                    fullWidth
-                  />
-                </div>
-              </div>
-              <div className="upload-file">
-                <input
-                  type="file"
-                  title=" "
-                  id="inputFile"
-                  onChange={handleFileChange}
-                />
-                <label for="inputFile" id="fileLabel">
-                  ファイル選択
-                </label>
-                <label id="selectedLabel">選択してください。</label>
-              </div>
-              <div className="upload-button">
-                <button onClick={handleUpload}>アップロード</button>
-              </div>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         </div>

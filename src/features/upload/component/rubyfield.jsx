@@ -45,7 +45,6 @@ export const RubyField = ({ id, onConfirmed, inputProps }) => {
   useEffect(() => {
     console.log("definited: ", definited);
   }, [definited]);
-
   /*useEffect(() => {
     console.log('combinated: ', combinated);
   }, [combinated]);*/

@@ -5,9 +5,7 @@ export const StampCard = ({ stampImg, stampCount, stamps }) => {
     <div className="stamp-card">
       <StampButton StampImg={stampImg} count={stampCount} />
       <div className="stamp-time">
-        {stamps.map((stamp) => (
-          <span>{stamp}</span>
-        ))}
+        {Array.isArray(stamps) && stamps.map((stamp) => <span>{stamp}</span>)}
       </div>
     </div>
   );

@@ -4,15 +4,19 @@ import { MainLayout } from "../../../components/Layout";
 import "../../../styles/video/question/index.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
-import { createRef, useState } from "react";
+import { createRef, useEffect, useState } from "react";
 import { useScreenshot, createFileName } from "use-react-screenshot";
 import { Modal } from "react-bootstrap";
 import { ModalButton } from "../../../components/Elements/ModalButton";
 import { KanjiText } from "../../../components/Elements/CustomText";
 import ReactPlayer from "react-player";
 import VTTFILE from "../../../assets/1.vtt";
+import { setVideoQuestion } from "../../../stores/store";
+import { useDispatch, useSelector } from "react-redux";
+import { get2byteLength } from "../../../config";
 
 export const QuestionEdit = () => {
+  const dispatch = useDispatch();
   const { videoId, isTyping } = useParams();
   const ref = createRef(null);
 
@@ -23,6 +27,16 @@ export const QuestionEdit = () => {
     type: "image/jpeg",
     quality: 1.0,
   });
+  let questionText = "";
+  let videoState = useSelector((state) => state.videos[videoId]);
+  if (videoState) {
+    if ("question" in videoState) {
+      questionText = videoState.question;
+    }
+  }
+  useEffect(() => {
+    setText(questionText);
+  }, [questionText]);
 
   const download = (
     image,
@@ -38,9 +52,21 @@ export const QuestionEdit = () => {
   const closeModal = () => {
     setSaveModal(false);
   };
+
+  const confirmModal = () => {
+    dispatch(
+      setVideoQuestion({
+        videoId: videoId,
+        question: text,
+      })
+    );
+    setSaveModal(false);
+  };
   const onChangeTextArea = (event) => {
+    if (event.target.value.length > 150) return;
     setText(event.target.value);
-    setLetterCnt(event.target.value.length);
+    let cnt = get2byteLength(event.target.value);
+    setLetterCnt(cnt);
   };
   return (
     <MainLayout>
@@ -101,10 +127,11 @@ export const QuestionEdit = () => {
                       : "ここに書いてください。"
                   }
                   onChange={onChangeTextArea}
+                  value={text}
                 ></textarea>
                 <div className="limit-letter">
                   <span>
-                    {letterCnt.toString().padStart(2, "0")}
+                    {letterCnt.toString().padStart(1, "0")}
                     <KanjiText title={"字"} pronun={"じ"} />
                     ／150
                     <KanjiText title={"字"} pronun={"じ"} />
@@ -138,7 +165,7 @@ export const QuestionEdit = () => {
             <ModalButton
               isConfirm={true}
               children={"ほぞんする"}
-              onClick={closeModal}
+              onClick={confirmModal}
             />
             <ModalButton
               isConfirm={false}

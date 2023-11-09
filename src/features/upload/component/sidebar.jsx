@@ -12,6 +12,7 @@ import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import AddIcon from "@mui/icons-material/Add";
 import ListIcon from "@mui/icons-material/List";
+import ArrowDropUp from "@mui/icons-material/ArrowDropUp";
 
 export const CustomSidebar = () => {
   const { collapseSidebar } = useProSidebar();
@@ -40,6 +41,12 @@ export const CustomSidebar = () => {
               onClick={() => navigate("/upload/add_file")}
             >
               追加
+            </MenuItem>
+            <MenuItem
+              icon={<ArrowDropUp />}
+              onClick={() => navigate("/upload/manage_unit")}
+            >
+              単元管理
             </MenuItem>
           </SubMenu>
         </Menu>
