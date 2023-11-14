@@ -1,9 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+// const baseURL = "http://video-streaming-api.mastercode.jp:8000/";
+const baseURL = "http://127.0.0.1:8000/";
+
 export const videoApi = createApi({
   reducerPath: "videoApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://127.0.0.1:8000/",
+    baseUrl: baseURL,
   }),
   tagTypes: ["Videos"],
   endpoints: (builder) => ({
@@ -35,7 +38,7 @@ export const videoApi = createApi({
 export const categoryApi = createApi({
   reducerPath: "categoryApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://127.0.0.1:8000/",
+    baseUrl: baseURL,
   }),
   tagTypes: ["Categories"],
   endpoints: (builder) => ({
@@ -48,7 +51,7 @@ export const categoryApi = createApi({
 export const gradeApi = createApi({
   reducerPath: "gradeApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://127.0.0.1:8000/",
+    baseUrl: baseURL,
   }),
   tagTypes: ["Grades"],
   endpoints: (builder) => ({
@@ -61,7 +64,7 @@ export const gradeApi = createApi({
 export const unitApi = createApi({
   reducerPath: "unitApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://127.0.0.1:8000/",
+    baseUrl: baseURL,
   }),
   tagTypes: ["Units"],
   endpoints: (builder) => ({

@@ -159,7 +159,7 @@ function AddVideoScreen() {
       formData.append("unit", classroom);
 
       setIsLoading(false);
-      fetch("http://127.0.0.1:8000/videos/", {
+      fetch("http://video-streaming-api.mastercode.jp:8000/", {
         method: "POST",
         body: formData,
       })
