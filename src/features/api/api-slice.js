@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-// const baseURL = "http://video-streaming-api.mastercode.jp:8000/";
-const baseURL = "http://127.0.0.1:8000/";
+const baseURL = "http://video-streaming-api.mastercode.jp:8000/";
+// const baseURL = "http://127.0.0.1:8000/";
 
 export const videoApi = createApi({
   reducerPath: "videoApi",

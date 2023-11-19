@@ -32,7 +32,7 @@ import {
 export const VideoDetail = () => {
   const dispatch = useDispatch();
 
-  const { videoId } = useParams();
+  const { videoId, gradeId } = useParams();
   const [showQuestionModal, setShowQuestionModal] = useState(false);
   const [showWordModal, setShowWordModal] = useState(false);
   const [word, setWord] = useState("");
@@ -42,6 +42,7 @@ export const VideoDetail = () => {
   const [inputSel, setInputSel] = useState(false);
   const [stmpGraph, setStmpGraph] = useState(false);
   const [stampHeaderStr, setStampHeaderStr] = useState(null);
+  const [videoURL, setVideoURL] = useState("");
 
   const [normalCount, setNormalCount] = useState(0);
   const [goodCount, setGoodCount] = useState(0);
@@ -63,6 +64,29 @@ export const VideoDetail = () => {
       setGoodStamps(videoState.goodStamps);
       setBestStamps(videoState.bestStamps);
     }
+    let params = {
+      grade_id: gradeId,
+      unit_id: videoId,
+      category_id: 2,
+    };
+    const url = "http://video-streaming-api.mastercode.jp:8000/videos/get_video";
+    const queryParams = new URLSearchParams(params);
+    const endpoint = `${url}?${queryParams}`;
+    fetch(endpoint)
+          .then((response) => {
+            if (response.ok) {
+              console.log("response", response);
+              return response.json();
+            }
+            throw new Error("Network response was not ok");
+          })
+          .then((data) => {
+            console.log("Get Video successful:", data);
+            setVideoURL(data.video_url);
+          })  
+          .catch((error) => {
+            console.error("Get Video error:", error);
+          });
   }, []);
 
   const textRef = useRef(null);
@@ -328,7 +352,7 @@ export const VideoDetail = () => {
               <ReactPlayer
                 ref={videoRef}
                 url={
-                  "https://s3.ap-northeast-1.amazonaws.com/mastercode.jp-movie-react/input/123.mov"
+                  videoURL
                 }
                 id="MainPlay"
                 loop
