@@ -65,11 +65,11 @@ export const Home = () => {
           </div>
           <div className="row p-3 mt-3">
             <div className="col-10">
-              <div className="col-3">
+              {/* <div className="col-3">
                 <Link to={`/upload/`} className="btn-level">
                   {"アップロード"}
                 </Link>
-              </div>
+              </div> */}
             </div>
             <div className="col-2">
               <button

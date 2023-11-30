@@ -7,7 +7,7 @@ export const VideoRoutes = () => {
   return (
     <Routes>
       <Route path="/:level" element={<VideoList />} />
-      <Route path="/detail/:videoId" element={<VideoDetail />} />
+      <Route path="/detail/:videoId/:gradeId" element={<VideoDetail />} />
       <Route
         path="/detail/:videoId/question/:isTyping"
         element={<QuestionEdit />}

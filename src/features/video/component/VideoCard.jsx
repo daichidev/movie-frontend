@@ -7,6 +7,7 @@ import medal from "../../../assets/medal.gif";
 export const VideoCard = ({
   title,
   content,
+  gradeId,
   videoId,
   isClassic,
   classicType,
@@ -15,7 +16,7 @@ export const VideoCard = ({
   let useQuestion = false;
   const navigate = useNavigate();
   const goDetail = () => {
-    navigate(`/videos/detail/${videoId}`);
+    navigate(`/videos/detail/${videoId}/${gradeId}`);
   };
 
   const videoState = useSelector((state) => state.videos[videoId]);
