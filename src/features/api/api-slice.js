@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-// const baseURL = "http://video-streaming-api.mastercode.jp:8000/";
-const baseURL = "http://127.0.0.1:8000/";
+const baseURL = "http://video-streaming-api.mastercode.jp:8000/";
+// const baseURL = "http://127.0.0.1:8000/";
 
 export const videoApi = createApi({
   reducerPath: "videoApi",
@@ -84,6 +84,22 @@ export const unitApi = createApi({
   }),
 });
 
+export const dictionaryApi = createApi({
+  reducerPath: "dictionaryApi",
+  baseQuery: fetchBaseQuery({
+    baseUrl: "https://mastercode.jp/apps/api/dictionary",
+  }),
+  tagTypes: ["Dictionaries"],
+  endpoints: (builder) => ({
+    getComments: builder.query({
+      query: (params) => ({
+        url: "/show_detail",
+        params,
+      }),
+    }),
+  }),
+});
+
 export const {
   useGetVideosQuery,
   useUpdateVideosMutation,
@@ -92,3 +108,4 @@ export const {
 export const { useGetCategoriesQuery } = categoryApi;
 export const { useGetGradesQuery } = gradeApi;
 export const { useGetUnitsQuery, useUpdateUnitsMutation } = unitApi;
+export const { useGetCommentsQuery } = dictionaryApi;

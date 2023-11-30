@@ -4,6 +4,7 @@ import { videoApi } from "../features/api/api-slice";
 import { categoryApi } from "../features/api/api-slice";
 import { gradeApi } from "../features/api/api-slice";
 import { unitApi } from "../features/api/api-slice";
+import { dictionaryApi } from "../features/api/api-slice";
 
 const videoSlice = createSlice({
   name: "videos",
@@ -49,6 +50,7 @@ export const store = configureStore({
     [categoryApi.reducerPath]: categoryApi.reducer,
     [gradeApi.reducerPath]: gradeApi.reducer,
     [unitApi.reducerPath]: unitApi.reducer,
+    [dictionaryApi.reducerPath]: dictionaryApi.reducer,
     videos: videoSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -62,7 +64,8 @@ export const store = configureStore({
       .concat(videoApi.middleware)
       .concat(categoryApi.middleware)
       .concat(unitApi.middleware)
-      .concat(gradeApi.middleware),
+      .concat(gradeApi.middleware)
+      .concat(dictionaryApi.middleware),
 });
 
 export const {
