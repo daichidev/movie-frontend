@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const baseURL = "http://video-streaming-api.mastercode.jp:8000/";
+export const baseURL = "http://video-streaming-api.mastercode.jp:8000/";
 // const baseURL = "http://127.0.0.1:8000/";
 
 export const videoApi = createApi({
@@ -84,21 +84,38 @@ export const unitApi = createApi({
   }),
 });
 
-export const dictionaryApi = createApi({
-  reducerPath: "dictionaryApi",
+export const wordApi = createApi({
+  reducerPath: "wordApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://mastercode.jp/apps/api/dictionary",
+    baseUrl: baseURL,
   }),
-  tagTypes: ["Dictionaries"],
+  tagTypes: ["Words"],
   endpoints: (builder) => ({
-    getComments: builder.query({
-      query: (params) => ({
-        url: "/show_detail",
-        params,
-      }),
+    getWords: builder.query({
+      query: (id) => `/words/?video_id=${id}`
     }),
   }),
 });
+
+export const stampApi = createApi({
+  reducerPath: 'stampApi',
+  baseQuery: fetchBaseQuery({
+    baseUrl: baseURL
+  }),
+  tagTypes: ["Stamps"],
+  endpoints: (builder) => ({
+    getStamps: builder.query({
+      query: (id) => `/stamps/?video_id=${id}`
+    }),
+    createStamp: builder.mutation({
+      query: (formData) => ({
+        url: `/stamps/`,
+        method: "POST",
+        body: formData,
+      }),
+    })
+  })
+})
 
 export const {
   useGetVideosQuery,
@@ -108,4 +125,5 @@ export const {
 export const { useGetCategoriesQuery } = categoryApi;
 export const { useGetGradesQuery } = gradeApi;
 export const { useGetUnitsQuery, useUpdateUnitsMutation } = unitApi;
-export const { useGetCommentsQuery } = dictionaryApi;
+export const { useGetWordsQuery } = wordApi;
+export const { useGetStampsQuery, useCreateStampMutation } = stampApi;

@@ -7,6 +7,7 @@ import { VideoCard } from "../component/VideoCard";
 import { dummyVideoData, dummyVideoDataForClassic } from "../../../config";
 import { isNumber } from "../../../config";
 import { useGetUnitsQuery } from "../../api/api-slice";
+import { CustomSpinner } from "../../upload/component/spinner";
 
 export const VideoList = () => {
   const { level } = useParams();
@@ -35,7 +36,7 @@ export const VideoList = () => {
           console.error("Upload error:", error);
         });
 
-  const { data: unitsData } = useGetUnitsQuery(c_level);
+  const { data: unitsData, isLoading } = useGetUnitsQuery(c_level);
 
   let dummyData = [];
   if (unitsData) {
@@ -54,24 +55,25 @@ export const VideoList = () => {
       <Header />
       <SubLayout>
         <Title title={level} />
+        {!isLoading ? 
         <div className="mt-3 video-list">
-          {dummyData.length ? (
-            dummyData.map((element) => {
-              return (
-                <VideoCard
-                  title={element.name}
-                  gradeId={c_level}
-                  content={element.content}
-                  videoId={element.id}
-                  isClassic={element.isClassic}
-                  classicType={element.classicType}
-                />
-              );
-            })
-          ) : (
-            <div>データなし</div>
-          )}
-        </div>
+        {dummyData.length ? (
+          dummyData.map((element) => {
+            return (
+              <VideoCard
+                title={element.name}
+                gradeId={c_level}
+                content={element.content}
+                videoId={element.id}
+                isClassic={element.isClassic}
+                classicType={element.classicType}
+              />
+            );
+          })
+        ) : (
+          <div>データなし</div>
+        )}
+      </div> : <CustomSpinner></CustomSpinner>}
       </SubLayout>
     </MainLayout>
   );

@@ -9,6 +9,7 @@ import BookImg from "../../../assets/book.png";
 import { StampButton } from "../component/StampButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faNavicon } from "@fortawesome/free-solid-svg-icons";
+import { CustomSpinner } from "../../upload/component/spinner";
 import { dummyWordData } from "../../../config";
 import { WordCard } from "../component/WordCard";
 import { useEffect, useRef, useState } from "react";
@@ -22,7 +23,10 @@ import { InputSelectionModal } from "../../../components/Elements/InputSelection
 import { BarChart } from "../component/BarChart";
 import { KanjiText } from "../../../components/Elements/CustomText";
 import ReactPlayer from "react-player";
+import { default as JsxParser } from "html-react-parser";
 import { useDispatch, useSelector } from "react-redux";
+import { useGetWordsQuery } from "../../api/api-slice";
+import { useCreateStampMutation } from "../../api/api-slice";
 import {
   setVideoNormalCount,
   setVideoGoodCount,
@@ -43,6 +47,7 @@ export const VideoDetail = () => {
   const [stmpGraph, setStmpGraph] = useState(false);
   const [stampHeaderStr, setStampHeaderStr] = useState(null);
   const [videoURL, setVideoURL] = useState("");
+  const [wordId, setWordId] = useState("");
 
   const [normalCount, setNormalCount] = useState(0);
   const [goodCount, setGoodCount] = useState(0);
@@ -53,6 +58,11 @@ export const VideoDetail = () => {
   const [bestStamps, setBestStamps] = useState([]);
 
   const videoState = useSelector((state) => state.videos[videoId]);
+
+  const { data: wordsData, isLoading } = useGetWordsQuery(wordId);
+  console.log("wordsData", wordsData);
+
+  const [createStamp, { isLoading: stampLoading, isError }] = useCreateStampMutation();
 
   useEffect(() => {
     if (videoState) {
@@ -83,11 +93,41 @@ export const VideoDetail = () => {
           .then((data) => {
             console.log("Get Video successful:", data);
             setVideoURL(data.video_url);
+            setWordId(data.video_id);
           })  
           .catch((error) => {
             console.error("Get Video error:", error);
           });
   }, []);
+
+  // useEffect(() => {
+  //   saveStamps()
+  // }, [videoState])
+
+  const saveStamps = async () => {
+    const formData = new FormData();
+    
+    if (videoState.question !== undefined) {
+      formData.append("question", videoState.question);
+    }
+    if (videoState.normalStamps !== undefined) {
+      videoState.normalStamps.forEach((stamp, index) => {
+        formData.append('normal_stamps', stamp);
+      });
+    }
+    if (videoState.goodStamps !== undefined) {
+      videoState.goodStamps.forEach((stamp, index) => {
+        formData.append('good_stamps', stamp);
+      });
+    }
+    if (videoState.bestStamps !== undefined) {
+      videoState.bestStamps.forEach((stamp, index) => {
+        formData.append('best_stamps', stamp);
+      });
+    }
+    console.log("formData", formData, "videoState", videoState)
+    const result = await createStamp(formData);
+  }
 
   const textRef = useRef(null);
   const chapterRef = useRef(null);
@@ -103,11 +143,13 @@ export const VideoDetail = () => {
 
   const openWordModal = (word) => {
     setShowWordModal(true);
-    setWord(word);
+    getWordId(word);
+    // setWord(word);
   };
 
   const closeWordModal = () => {
     setShowWordModal(false);
+    setWord("")
   };
 
   const closeStmpClearModal = () => {
@@ -217,6 +259,69 @@ export const VideoDetail = () => {
       .toString()
       .padStart(2, 0)}:${seconds.toString().padStart(2, 0)}`;
   };
+
+  const getWordId = (text) => {
+    fetch(
+      `https://mastercode.jp/apps/api/dictionary/search/?mode=esjp&search_word=${text}&search_mode=exact`,
+      {
+        method: "GET",
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          console.log("getWordId", response);
+          return response.json();
+        }
+        console.log("what is getWordId: ", response);
+
+        throw new Error("getWordId response was not ok");
+      })
+      .then((data) => {
+        console.log("getWordId successful:", data);
+
+        let pattern = /showDetailUNI_(\d+)_search/;
+
+        let matches = pattern.exec(data);
+
+        if (matches) {
+          let extractedNumber = matches[1];
+          console.log(extractedNumber);
+          getWordContent(extractedNumber);
+        } else {
+          console.log("No match found.");
+        }
+      })
+      .catch((error) => {
+        console.error("getWordId error:", error);
+      });
+  }
+
+  const getWordContent = (id) => {
+    fetch(
+      `https://mastercode.jp/apps/api/dictionary/show_detail/?useruuid=AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHH&mode=esjp&id=${id}&referrer=1&invoker=spread&discard_zoom=discard`,
+      {
+        method: "GET",
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          console.log("getWordContent", response);
+          return response.json();
+        }
+        console.log("what is getWordContent: ", response);
+
+        throw new Error("getWordContent response was not ok");
+      })
+      .then((data) => {
+        console.log("getWordContent successful:", data);
+        let temp = data.arg1
+        setWord(temp)
+      })
+      .catch((error) => {
+        console.error("getWordContent error:", error);
+        setWord(error)
+      });
+  }
 
   return (
     <MainLayout>
@@ -389,14 +494,27 @@ export const VideoDetail = () => {
                   </div>
                 </div>
               </div>
-              <div className="word-list">
-                {dummyWordData.map((element) => (
+              {
+                isLoading ? <div
+                style={{
+                  width: "100%",
+                  height: "30vh",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <CustomSpinner></CustomSpinner>
+              </div> : <div className="word-list">
+                {wordsData && wordsData.map((element) => (
                   <WordCard
-                    text={element}
-                    onClick={() => openWordModal(element)}
+                    key={element.id}
+                    text={element.word_text}
+                    onClick={() => openWordModal(element.word_text)}
                   ></WordCard>
                 ))}
               </div>
+              }
             </div>
           </div>
         </div>
@@ -453,7 +571,7 @@ export const VideoDetail = () => {
         <WordModal
           showModal={showWordModal}
           onClose={closeWordModal}
-          text={word}
+          text={JsxParser(word)}
         />
       </div>
       <div className="modal-stamp">
