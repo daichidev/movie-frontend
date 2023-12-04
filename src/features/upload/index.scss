@@ -12,35 +12,24 @@
 ::cue {
   color: white;
   font-family: 'Klee One', cursive;
-  font-weight: bold; 
+  font-weight: bold;
   background-color: black;
 }
 
-// font-family: 'Yu Gothic', 'YuGothic', 'ヒラギノ角ゴ ProN', 'Hiragino Kaku Gothic ProN', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif; 
+// font-family: 'Yu Gothic', 'YuGothic', 'ヒラギノ角ゴ ProN', 'Hiragino Kaku Gothic ProN', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
 
-
-::cue(ruby) { 
+::cue(ruby) {
   background-color: black;
-  font-size: 2rem; 
+  font-size: 2rem;
 }
 
 h2 {
   align-self: center;
 }
 
-button {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
-}
-
 input[type='file'] {
   display: none;
 }
-
 
 th {
   div {
@@ -108,11 +97,11 @@ table {
     div {
       width: 72%;
       div {
-        width: 100%
+        width: 100%;
       }
     }
   }
-  
+
   .upload-content {
     @include flexDiv();
     padding: 1rem;
@@ -145,58 +134,57 @@ table {
     }
   }
 }
-  .custom-file-input::-webkit-file-upload-button {
-        visibility: hidden; 
-  }
+.custom-file-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
 
-  #side-bar {
-    background-color: #c8c8c8;
-    h2 {
-      font-size: 1.5rem;
-    }
-    span {
-      font-size: 1rem;
-    }
+#side-bar {
+  background-color: #c8c8c8;
+  h2 {
+    font-size: 1.5rem;
   }
+  span {
+    font-size: 1rem;
+  }
+}
 
-  .custom-table {
-    width: 100%;
-    padding: 2rem;
+.custom-table {
+  width: 100%;
+  padding: 2rem;
+  background-color: rgb(249, 249, 249, 0.7) !important;
+  div {
     background-color: rgb(249, 249, 249, 0.7) !important;
-    div {
-      background-color: rgb(249, 249, 249, 0.7) !important;
-    }
   }
+}
 
-
-  .unit-manage {
-    width: 100%;
-    height: 100vh;
-    padding: 3rem;
+.unit-manage {
+  width: 100%;
+  height: 100vh;
+  padding: 3rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  h2 {
+    margin-bottom: 3rem;
+    align-self: 'unset';
+  }
+  .select-unit {
     display: flex;
     align-items: center;
-    flex-direction: column;
-    h2 {
-      margin-bottom: 3rem;
-      align-self: "unset"
-    }
-    .select-unit {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 1rem;
-      .select-sub {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 3rem;
-        span {
-          font-size: 1.3rem;
-          margin-right: 1rem;
-        }
-        div {
-          width: 13rem;
-        }
+    justify-content: center;
+    margin-bottom: 1rem;
+    .select-sub {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 3rem;
+      span {
+        font-size: 1.3rem;
+        margin-right: 1rem;
+      }
+      div {
+        width: 13rem;
       }
     }
   }
+}
