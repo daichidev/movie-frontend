@@ -1,0 +1,1 @@
+export const LEARNING_HISTORY_API_URL = process.env.LEARNING_HISTORY_API_URL;
