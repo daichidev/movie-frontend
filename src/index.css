@@ -17,6 +17,11 @@
 
 body {
   font-family: 'Noto Sans JP', sans-serif;
+  display: grid;
+  place-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 
   ::-webkit-scrollbar {
     width: 10px;
@@ -35,20 +40,22 @@ body {
     height: 100%;
   }
 }
+
 /* 
 body {
     font-family: 'Honoka', sans-serif;
 } */
 
 #root {
-  width: 100vw;
-  height: 100vh;
+  width: 1690px;
+  height: 1080px;
   margin: 0 auto;
   overflow: auto;
-  .main {
-    width: 100%;
-    height: 100%;
-  }
+}
+main {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 .modal-content {
   border: 3px solid #bbbbbb;
