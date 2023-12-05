@@ -1,4 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { ReactComponent as HomeIcon } from '../../assets/svgs/home.svg';
+import { ReactComponent as LogoutIcon } from '../../assets/svgs/logout.svg';
 import '../../styles/dashboard/index.scss';
 import { LevelButton } from './component/Button';
 import { ClassicButton } from './component/ClassicButton';
@@ -31,12 +33,12 @@ export const Home = () => {
         <nav className={styles.nav}>
           {/* TODO リンク */}
           <a href="/">
-            <img src="/images/home.png" />
+            <HomeIcon />
             {`トモプラ\nホーム`}
           </a>
           {/* TODO ログアウト処理 */}
           <button>
-            <img src="/images/logout.png" />
+            <LogoutIcon />
             ログアウト
           </button>
         </nav>
