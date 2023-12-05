@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+  <g filter="url(#filter0_d_3507_4234)">
+    <path d="M57 30C57 16.1929 45.8071 5 32 5C18.1929 5 7 16.1929 7 30C7 43.8071 18.1929 55 32 55C45.8071 55 57 43.8071 57 30Z" fill="url(#paint0_linear_3507_4234)"/>
+    <path d="M32 5C45.81 5 57 16.19 57 30C57 43.81 45.81 55 32 55C18.19 55 7 43.81 7 30C7 16.19 18.19 5 32 5ZM32 4C17.66 4 6 15.66 6 30C6 44.34 17.66 56 32 56C46.34 56 58 44.34 58 30C58 15.66 46.34 4 32 4Z" fill="white"/>
+  </g>
+  <path d="M24 39V43C24 44.1046 24.8954 45 26 45H42C43.1046 45 44 44.1046 44 43V17C44 15.8954 43.1046 15 42 15H26C24.8954 15 24 15.8954 24 17V21" stroke="white" stroke-width="3" stroke-linejoin="round"/>
+  <rect width="18" height="6" rx="0.5" transform="matrix(-1 0 0 1 36 27)" fill="white"/>
+  <path d="M12.4811 29.6111C12.2335 29.8113 12.2335 30.1887 12.4811 30.3889L18.6857 35.404C19.0127 35.6683 19.5 35.4355 19.5 35.0151L19.5 24.9849C19.5 24.5645 19.0127 24.3317 18.6857 24.596L12.4811 29.6111Z" fill="white"/>
+  <defs>
+    <filter id="filter0_d_3507_4234" x="0" y="0" width="64" height="64" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="2"/>
+      <feGaussianBlur stdDeviation="3"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.7 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_3507_4234"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_3507_4234" result="shape"/>
+    </filter>
+    <linearGradient id="paint0_linear_3507_4234" x1="32" y1="5" x2="32" y2="55" gradientUnits="userSpaceOnUse">
+      <stop offset="0.104167" stop-color="#B5B5C1"/>
+      <stop offset="0.916667" stop-color="#5A5A63"/>
+    </linearGradient>
+  </defs>
+</svg>

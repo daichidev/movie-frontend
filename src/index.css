@@ -1,9 +1,9 @@
 @font-face {
-    font-family: 'Honoka';
-    src: url('/public/fonts/Honoka-Shin-Maru-Gothic_R.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+  font-family: 'Honoka';
+  src: url('/public/fonts/Honoka-Shin-Maru-Gothic_R.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 /* @font-face {
     font-family: 'Honoka';
@@ -16,7 +16,24 @@
 } */
 
 body {
-    font-family: 'Noto Sans JP', sans-serif; 
+  font-family: 'Noto Sans JP', sans-serif;
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: #d9d9d9;
+    border-radius: 20px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #828282;
+    border-radius: 10px;
+    background-size: 10px 30px;
+  }
+  ::-webkit-scrollbar-button {
+    height: 100%;
+  }
 }
 /* 
 body {
@@ -24,42 +41,65 @@ body {
 } */
 
 #root {
-    width: 100vw;
-    height: 100vh;
-    margin: 0 auto;
-    overflow: auto;
-    .main {
-        width: 100%;
-        height: 100%;
-    }
+  width: 100vw;
+  height: 100vh;
+  margin: 0 auto;
+  overflow: auto;
+  .main {
+    width: 100%;
+    height: 100%;
+  }
 }
 .modal-content {
-    border: 3px solid #bbbbbb;
-
+  border: 3px solid #bbbbbb;
 }
 .modal-header {
-    background-color: #bbbbbb;
+  background-color: #bbbbbb;
 }
 .modal-body {
-
 }
 .modal-footer {
-    border: none;
+  border: none;
 }
 .dropdown > button {
-    background-color: white;
-    color: black;
-    border: none;
-    border-radius: 0;
+  background-color: white;
+  color: black;
+  border: none;
+  border-radius: 0;
 }
 .dropdown > button::after {
-    content: "";
-    border: solid black;
-    border-width: 0 1px 1px 0;
-    padding: 5px;
-    transform: rotate(45deg);
-    margin-left: 4rem;
+  content: '';
+  border: solid black;
+  border-width: 0 1px 1px 0;
+  padding: 5px;
+  transform: rotate(45deg);
+  margin-left: 4rem;
 }
 .custom-font {
-    font-family: 'Honoka', sans-serif;
+  font-family: 'Honoka', sans-serif;
+}
+
+button {
+  border: unset;
+  background: unset;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: unset;
+  color: unset;
+}
+hr {
+  opacity: unset;
+}
+ul {
+  margin: 0;
+  padding: 0;
+}
+li {
+  margin: 0;
+  padding: 0;
+  text-indent: 0;
+  list-style-type: none;
 }
