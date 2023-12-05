@@ -35,30 +35,18 @@ export const VideoCard = ({
       <div className={styles.content}>
         <div className={styles.title}>
           {title}
-          <div className={styles.buttons}>
-            <button className={clsx(!useStamp && styles.inactive)}>
+          <div className={styles.icons}>
+            <div className={clsx(!useStamp && styles.inactive)}>
               <StampIcon />
-            </button>
-            <button className={clsx(!useQuestion && styles.inactive)}>
+            </div>
+            <div className={clsx(!useQuestion && styles.inactive)}>
               <QuestionIcon />
-            </button>
+            </div>
           </div>
         </div>
         <div className={styles.description}>
           <ExtendedKanjiText text={content} />
         </div>
-        {/* <div className="btn-stamp">
-          <div className={useStamp ? 'stamp' : ''}>
-            <span>{useStamp ? 'スタンプ' : ''}</span>
-          </div>
-          <div className={useQuestion ? 'question' : ''}>
-            {useQuestion ? (
-              <img src={'medal'} alt="medal-img" width="105%"></img>
-            ) : (
-              <span></span>
-            )}
-          </div>
-        </div> */}
       </div>
     </Link>
   );

@@ -10,7 +10,7 @@
     .content {
       background: #fff;
     }
-    .buttons button {
+    .icons div {
       filter: grayscale(1);
     }
   }
@@ -42,18 +42,18 @@
   font-weight: 600;
   line-height: 20px;
 
-  .buttons {
+  .icons {
     position: absolute;
     top: 0;
     right: 0;
   }
 }
 
-.buttons {
+.icons {
   display: flex;
   column-gap: 4px;
 
-  button.inactive {
+  div.inactive {
     filter: grayscale(1);
   }
 }
