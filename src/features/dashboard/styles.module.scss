@@ -70,8 +70,20 @@
 
 .grade {
   font-size: 66px;
-  letter-spacing: -1.32px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
 }
+.grade + span {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+.genre {
+  font-size: 32px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  a {
+    padding-bottom: 26px;
   }
 }
 
