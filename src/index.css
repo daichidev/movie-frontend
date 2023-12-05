@@ -65,9 +65,24 @@ body {
 button {
   border: unset;
   background: unset;
+  margin: 0;
+  padding: 0;
 }
 
 a {
   text-decoration: unset;
   color: unset;
+}
+hr {
+  opacity: unset;
+}
+ul {
+  margin: 0;
+  padding: 0;
+}
+li {
+  margin: 0;
+  padding: 0;
+  text-indent: 0;
+  list-style-type: none;
 }
