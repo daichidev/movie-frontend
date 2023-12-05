@@ -1,7 +1,5 @@
 import { default as JsxParser } from 'html-react-parser';
-import { ReactComponent as BackIcon } from '../../../../assets/svgs/back.svg';
-import { ReactComponent as HomeIcon } from '../../../../assets/svgs/home.svg';
-import { ReactComponent as LogoutIcon } from '../../../../assets/svgs/logout.svg';
+import { Navigation } from '../../../../components/Navigation';
 import { convertRuby } from '../../../../config';
 import { VideoCard } from '../../component/VideoCard';
 import styles from './styles.module.scss';
@@ -11,6 +9,7 @@ export const VideoList = () => {
   const { videoList, gradeId } = useVideoList();
   return (
     <main className={styles.main}>
+      <Navigation className={styles.nav} />
       <div className={styles.body}>
         <div className={styles.title}>
           <span>{gradeId}</span>
@@ -36,24 +35,6 @@ export const VideoList = () => {
           })}
         </ul>
       </div>
-      <nav className={styles.nav}>
-        <button>
-          <BackIcon />
-          もどる
-        </button>
-        <div>
-          {/* TODO リンク */}
-          <a href="/">
-            <HomeIcon />
-            {`トモプラ\nホーム`}
-          </a>
-          {/* TODO ログアウト処理 */}
-          <button>
-            <LogoutIcon />
-            ログアウト
-          </button>
-        </div>
-      </nav>
     </main>
   );
 };
