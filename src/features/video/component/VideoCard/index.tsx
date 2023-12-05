@@ -30,7 +30,7 @@ export const VideoCard = ({
   return (
     <Link
       className={clsx(styles.card, disabled && styles.inactive)}
-      to={disabled ? to : ''}
+      to={disabled ? '' : to}
     >
       <div className={styles.content}>
         <div className={styles.title}>
