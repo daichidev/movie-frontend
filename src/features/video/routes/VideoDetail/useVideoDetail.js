@@ -29,6 +29,8 @@ export const useVideoDetail = () => {
   const [videoURL, setVideoURL] = useState('');
   const [wordId, setWordId] = useState('');
 
+  const [answerText, setAnswerText] = useState('');
+
   const [normalCount, setNormalCount] = useState(0);
   const [goodCount, setGoodCount] = useState(0);
   const [bestCount, setBestCount] = useState(0);
@@ -111,7 +113,6 @@ export const useVideoDetail = () => {
     const result = await createStamp(formData);
   };
 
-  const textRef = useRef(null);
   const chapterRef = useRef(null);
   const videoRef = useRef(null);
 
@@ -323,5 +324,7 @@ export const useVideoDetail = () => {
 
     inputMode,
     setInputMode,
+    answerText,
+    setAnswerText,
   };
 };

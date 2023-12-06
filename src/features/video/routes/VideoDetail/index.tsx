@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 import ReactPlayer from 'react-player';
 import { ReactComponent as Camera } from '../../../../assets/svgs/camera.svg';
 import { ReactComponent as Dictionary } from '../../../../assets/svgs/dictionary.svg';
@@ -8,6 +8,7 @@ import { ReactComponent as EraserAll } from '../../../../assets/svgs/eraser_all.
 import { ReactComponent as Keyboard } from '../../../../assets/svgs/keyboard.svg';
 import { ReactComponent as Pen } from '../../../../assets/svgs/pen.svg';
 import { ReactComponent as PenAlt } from '../../../../assets/svgs/pen_alt.svg';
+import { ReactComponent as PenWhite } from '../../../../assets/svgs/pen_white.svg';
 import { ReactComponent as StampNormal } from '../../../../assets/svgs/stamp1.svg';
 import { ReactComponent as StampGood } from '../../../../assets/svgs/stamp2.svg';
 import { ReactComponent as StampBest } from '../../../../assets/svgs/stamp3.svg';
@@ -34,6 +35,9 @@ export const VideoDetail = () => {
     handleNormalClick,
     handleGoodClick,
     handleBestClick,
+
+    answerText,
+    setAnswerText,
 
     ...values
   } = useVideoDetail();
@@ -106,7 +110,12 @@ export const VideoDetail = () => {
               </div>
             </div>
           </div>
-          <QuestionBoard inputMode={inputMode} setInputMode={setInputMode} />
+          <QuestionBoard
+            inputMode={inputMode}
+            setInputMode={setInputMode}
+            answerText={answerText}
+            setAnswerText={setAnswerText}
+          />
         </div>
       </Layout>
       <WordModal wordHtml={word} onClose={closeWordModal} />
@@ -118,10 +127,16 @@ const MAX_LENGTH = 150;
 type QuestionBoardProps = {
   inputMode: undefined | 'keyboard' | 'touch';
   setInputMode: (mode: undefined | 'keyboard' | 'touch') => void;
+  answerText: string;
+  setAnswerText: (answerText: string) => void;
 };
-const QuestionBoard = ({ inputMode, setInputMode }: QuestionBoardProps) => {
+const QuestionBoard = ({
+  inputMode,
+  setInputMode,
+  answerText,
+  setAnswerText,
+}: QuestionBoardProps) => {
   const ref = useRef<HTMLCanvasElement>(null);
-  const [count, setCount] = useState(0);
 
   const submit = () => {
     // TODO
@@ -147,30 +162,43 @@ const QuestionBoard = ({ inputMode, setInputMode }: QuestionBoardProps) => {
             {inputMode === 'touch' ? (
               <canvas ref={ref} style={{ touchAction: 'pinch-zoom' }} />
             ) : (
-              // TODO ソフトウェアキーボード
               <textarea
                 placeholder="「問いボックスにかいとうする」のボタンをおして、書いてみよう。"
-                onChange={(e) => setCount(e.target.value.length)}
+                value={answerText}
+                onChange={(e) => setAnswerText(e.target.value)}
                 maxLength={MAX_LENGTH}
                 disabled={!inputMode}
               />
             )}
-            {!inputMode && (
-              <button onClick={() => setInputMode('keyboard')}>
-                <Pen />
-                <ruby>
-                  問<rt>と</rt>
-                </ruby>
-                いボックスにかいとうする
-              </button>
-            )}
+            {!inputMode &&
+              (answerText ? (
+                <button
+                  className={styles.rewrite}
+                  // TODO 前回の入力モード
+                  onClick={() => setInputMode('keyboard')}
+                >
+                  <PenWhite />
+                  かきなおす
+                </button>
+              ) : (
+                <button
+                  className={styles.large}
+                  onClick={() => setInputMode('keyboard')}
+                >
+                  <Pen />
+                  <ruby>
+                    問<rt>と</rt>
+                  </ruby>
+                  いボックスにかいとうする
+                </button>
+              ))}
             {/* TODO onClick */}
             {inputMode && (
               <div className={styles['submit-control']}>
                 {inputMode === 'keyboard' ? (
                   <>
                     <div className={styles.counter}>
-                      {count}
+                      {answerText.length}
                       <ruby>
                         字<rt>じ</rt>
                       </ruby>
