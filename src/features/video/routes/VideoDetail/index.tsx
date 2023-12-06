@@ -1,8 +1,13 @@
 import clsx from 'clsx';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
+import { ReactComponent as Camera } from '../../../../assets/svgs/camera.svg';
 import { ReactComponent as Dictionary } from '../../../../assets/svgs/dictionary.svg';
+import { ReactComponent as Eraser } from '../../../../assets/svgs/eraser.svg';
+import { ReactComponent as EraserAll } from '../../../../assets/svgs/eraser_all.svg';
+import { ReactComponent as Keyboard } from '../../../../assets/svgs/keyboard.svg';
 import { ReactComponent as Pen } from '../../../../assets/svgs/pen.svg';
+import { ReactComponent as PenAlt } from '../../../../assets/svgs/pen_alt.svg';
 import { ReactComponent as StampNormal } from '../../../../assets/svgs/stamp1.svg';
 import { ReactComponent as StampGood } from '../../../../assets/svgs/stamp2.svg';
 import { ReactComponent as StampBest } from '../../../../assets/svgs/stamp3.svg';
@@ -30,19 +35,19 @@ export const VideoDetail = () => {
     handleGoodClick,
     handleBestClick,
 
-    inputSel,
-    setInputSel,
-
     ...values
   } = useVideoDetail();
-  const wordsData = (values?.wordsData || []) as {
+  const wordsData = (values.wordsData || []) as {
     id: string;
     word_text: string;
   }[];
+  const inputMode = values.inputMode as QuestionBoardProps['inputMode'];
+  const setInputMode =
+    values.setInputMode as QuestionBoardProps['setInputMode'];
   return (
     <>
       <Layout className={styles.main}>
-        <div className={styles.body}>
+        <div className={clsx(styles.body, inputMode && styles.inputting)}>
           <div className={styles.video}>
             <div className={styles['player-container']}>
               <p>どうがを みて、かんじた きもちの ボタンを おしましょう。</p>
@@ -101,30 +106,146 @@ export const VideoDetail = () => {
               </div>
             </div>
           </div>
-          <div className={styles.question}>
-            <div className={styles.container}>
-              <ToiBoxInstruction />
-              {/* TODO　処理実装 */}
-              <div className={styles.form}>
-                <textarea
-                  disabled={!inputSel}
-                  placeholder="「問いボックスにかいとうする」のボタンをおして、書いてみよう。"
-                />
-                {!inputSel && (
-                  <button onClick={() => setInputSel(true)}>
-                    <Pen />
-                    <ruby>
-                      問<rt>と</rt>
-                    </ruby>
-                    いボックスにかいとうする
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
+          <QuestionBoard inputMode={inputMode} setInputMode={setInputMode} />
         </div>
       </Layout>
       <WordModal wordHtml={word} onClose={closeWordModal} />
+    </>
+  );
+};
+
+const MAX_LENGTH = 150;
+type QuestionBoardProps = {
+  inputMode: undefined | 'keyboard' | 'touch';
+  setInputMode: (mode: undefined | 'keyboard' | 'touch') => void;
+};
+const QuestionBoard = ({ inputMode, setInputMode }: QuestionBoardProps) => {
+  const ref = useRef<HTMLCanvasElement>(null);
+  const [count, setCount] = useState(0);
+
+  const submit = () => {
+    // TODO
+    setInputMode(undefined);
+  };
+
+  useEffect(() => {
+    if (!ref.current) return;
+    const canvas = ref.current;
+    // TODO　手書き入力
+  }, [ref]);
+  return (
+    <>
+      <div
+        className={clsx(
+          styles.question,
+          inputMode === 'touch' && styles['active-touch'],
+        )}
+      >
+        <div className={clsx(styles.container)}>
+          <ToiBoxInstruction />
+          <div className={styles.form}>
+            {inputMode === 'touch' ? (
+              <canvas ref={ref} style={{ touchAction: 'pinch-zoom' }} />
+            ) : (
+              // TODO ソフトウェアキーボード
+              <textarea
+                placeholder="「問いボックスにかいとうする」のボタンをおして、書いてみよう。"
+                onChange={(e) => setCount(e.target.value.length)}
+                maxLength={MAX_LENGTH}
+                disabled={!inputMode}
+              />
+            )}
+            {!inputMode && (
+              <button onClick={() => setInputMode('keyboard')}>
+                <Pen />
+                <ruby>
+                  問<rt>と</rt>
+                </ruby>
+                いボックスにかいとうする
+              </button>
+            )}
+            {/* TODO onClick */}
+            {inputMode && (
+              <div className={styles['submit-control']}>
+                {inputMode === 'keyboard' ? (
+                  <>
+                    <div className={styles.counter}>
+                      {count}
+                      <ruby>
+                        字<rt>じ</rt>
+                      </ruby>
+                      ／{MAX_LENGTH}
+                      <ruby>
+                        字<rt>じ</rt>
+                      </ruby>
+                    </div>
+                    <button onClick={submit}>
+                      <ruby>
+                        決<rt>けっ</rt>定<rt>てい</rt>
+                      </ruby>
+                    </button>
+                  </>
+                ) : (
+                  <button onClick={submit}>けってい</button>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+        {inputMode && (
+          <div
+            className={clsx(
+              styles['input-control'],
+              inputMode === 'keyboard' && styles['active-keyboard'],
+              inputMode === 'touch' && styles['active-touch'],
+            )}
+          >
+            <div
+              className={clsx(
+                styles['button-container'],
+                inputMode === 'keyboard' && styles.active,
+              )}
+            >
+              <button onClick={() => setInputMode('keyboard')}>
+                <Keyboard />
+                キーボード
+              </button>
+            </div>
+            <div
+              className={clsx(
+                styles['button-container'],
+                inputMode === 'touch' && styles.active,
+              )}
+            >
+              <button onClick={() => setInputMode('touch')}>
+                <PenAlt />
+                <ruby>
+                  手<rt>て</rt>書<rt>が</rt>
+                </ruby>
+                き
+              </button>
+            </div>
+          </div>
+        )}
+        {/* TODO onClick */}
+        <div className={styles['touch-control']}>
+          <button>
+            <EraserAll />
+            ぜんぶけす
+          </button>
+          <button>
+            <Eraser />
+            ひとつけす
+          </button>
+        </div>
+      </div>
+      {inputMode && (
+        // TODO onClick
+        <button className={styles.save} onClick={submit}>
+          <Camera />
+          きろくする
+        </button>
+      )}
     </>
   );
 };

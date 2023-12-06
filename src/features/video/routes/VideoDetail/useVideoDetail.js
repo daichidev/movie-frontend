@@ -23,7 +23,7 @@ export const useVideoDetail = () => {
   const [chpList, setChpList] = useState(false);
   const [stmpList, setStmpList] = useState(false);
   const [stmpClear, setStmpClear] = useState(false);
-  const [inputSel, setInputSel] = useState(false);
+  const [inputMode, setInputMode] = useState(); // undefined / "keyboard" / "touch"
   const [stmpGraph, setStmpGraph] = useState(false);
   const [stampHeaderStr, setStampHeaderStr] = useState(null);
   const [videoURL, setVideoURL] = useState('');
@@ -153,7 +153,7 @@ export const useVideoDetail = () => {
   };
 
   const closeInputSelModal = () => {
-    setInputSel(false);
+    setInputMode(undefined);
   };
 
   const handleStamps = (self) => {
@@ -321,7 +321,7 @@ export const useVideoDetail = () => {
     closeWordModal,
     word,
 
-    inputSel,
-    setInputSel,
+    inputMode,
+    setInputMode,
   };
 };
