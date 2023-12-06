@@ -256,16 +256,18 @@ const QuestionBoard = ({
           </div>
         )}
         {/* TODO onClick */}
-        <div className={styles['touch-control']}>
-          <button>
-            <EraserAll />
-            ぜんぶけす
-          </button>
-          <button>
-            <Eraser />
-            ひとつけす
-          </button>
-        </div>
+        {inputMode === 'touch' && (
+          <div className={styles['touch-control']}>
+            <button>
+              <EraserAll />
+              ぜんぶけす
+            </button>
+            <button>
+              <Eraser />
+              ひとつけす
+            </button>
+          </div>
+        )}
       </div>
       {inputMode && (
         // TODO onClick
