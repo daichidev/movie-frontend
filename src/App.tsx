@@ -4,6 +4,8 @@ import { AppRoutes } from './routes';
 import { store } from './stores/store';
 import ScalingProvider from './utils/ScalingHelper';
 
+document.documentElement.lang = 'ja';
+
 function App() {
   return (
     <ScalingProvider>

@@ -318,6 +318,8 @@ export const useVideoDetail = () => {
     // TODO
     wordsData,
     openWordModal,
+    closeWordModal,
+    word,
 
     inputSel,
     setInputSel,
