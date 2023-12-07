@@ -5,6 +5,7 @@ import {
   useEffect,
   useState,
 } from 'react';
+import { SKIP_AUTH } from '../../../../env';
 import {
   Child,
   Children,
@@ -23,7 +24,6 @@ import {
   SSOClickActionCaller,
   SSOClickEventHandler,
 } from './AuthTypes';
-import { PasswordLoginOnSubmit } from './PasswordLogin';
 
 type Props = { children: ReactNode };
 export const authConfig: AuthConfig = {
@@ -66,9 +66,9 @@ export const AuthContext = createContext<AuthState>(initialAuthState);
 export const loadAuthProvider: AuthProviderLoader = (
   loader: PlatformMethodsLoader,
 ) => {
-  const AuthProvider: ({
+  const AuthProvider: ({ children }: Props) => JSX.Element = ({
     children,
-  }: Props) => JSX.Element = ({ children }: Props) => {
+  }: Props) => {
     const [uuid, setUuid] = useState('');
     const [currentUser, setCurrentUser] = useState<CurrentUser>();
     const [childrenList, setChildrenList] = useState<Children[]>([]);
@@ -128,6 +128,8 @@ export const loadAuthProvider: AuthProviderLoader = (
 
     useEffect(() => {
       // 未認証ならログイン画面へ
+      console.log(SKIP_AUTH);
+      if (SKIP_AUTH) return;
       if (!uuid) {
         init();
       } else {
@@ -375,32 +377,6 @@ export const loadAuthProvider: AuthProviderLoader = (
         return res;
       });
     };
-    // パスワードログイン処理
-    const PasswordLoginSubmit = (
-      email: string,
-      password: string,
-      _redirectPath: string | null | undefined,
-    ) => {
-      setRedirectPath(_redirectPath);
-      return PasswordLoginOnSubmit(email, password)
-        .then(({ data }) => {
-          setLoginMethod('password');
-          authenticated(data.user_uuid);
-          return 200;
-        })
-        .catch((res) => {
-          console.log(res);
-          if (!res.response) {
-            return 500;
-          }
-          return res.response.status;
-          // 400					リクエストパラメータに、不足、形式違いなどの問題がある
-          // 401					トークン、ログインID、パスワードのいずれかに間違いがある、アカウントロック状態
-          // 403					アクセス権がない
-          // 404					存在しないURLにアクセス、データが存在しない
-          // 500					不明なエラー
-        });
-    };
 
     // SSO 後処理（APIハンドリングはほぼ共通？）
     const SSOLoginClick: SSOClickActionCaller = (
@@ -438,7 +414,10 @@ export const loadAuthProvider: AuthProviderLoader = (
     };
 
     const SSOLoginMicrosoftClick: SSOClickEventHandler = () => {
-      return SSOLoginClick('microsoft', platformMethods.SSOLoginMicrosoftOnClick);
+      return SSOLoginClick(
+        'microsoft',
+        platformMethods.SSOLoginMicrosoftOnClick,
+      );
     };
 
     const SSOLoginAppleClick: SSOClickEventHandler = () => {
@@ -550,7 +529,6 @@ export const loadAuthProvider: AuthProviderLoader = (
       getChildrenList,
       getSchoolClassList,
       getChildrens,
-      PasswordLoginSubmit,
       SSOLoginGoogleClick,
       SSOLoginMicrosoftClick,
       SSOLoginAppleClick,
