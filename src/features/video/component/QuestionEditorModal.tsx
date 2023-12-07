@@ -44,6 +44,7 @@ export const QuestionEditorModal = ({
       <div className={styles.outer} onClick={() => onClose()}>
         <div className={styles.container} onClick={(e) => e.stopPropagation()}>
           <div className={styles.header}>
+            {/* TODO アイコン修正 */}
             <select
               value={classIndex}
               onChange={(e) => setClassIndex(+e.target.value)}

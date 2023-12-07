@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ReactNode, useRef } from 'react';
+import { ReactNode, useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { ReactComponent as Camera } from '../../../../assets/svgs/camera.svg';
 import { ReactComponent as Dictionary } from '../../../../assets/svgs/dictionary.svg';
@@ -16,10 +16,16 @@ import { ReactComponent as Star } from '../../../../assets/svgs/star.svg';
 import { ReactComponent as Timer } from '../../../../assets/svgs/timer.svg';
 import { ReactComponent as ToiBox } from '../../../../assets/svgs/toi_box.svg';
 import { Layout } from '../../../../components/Layout/Layout';
+import { BarChartModal } from '../../component/BarChartModal';
 import {
   QuestionEditorModal,
   QuestionEditorModalProps,
 } from '../../component/QuestionEditorModal';
+import {
+  MOCK_MY_STAMPS,
+  MOCK_STAMP_CHART_DATA,
+  StampType,
+} from '../../component/StampBarChart';
 import { WordModal } from '../../component/WordModal';
 import Canvas, { CanvasOperation, PlotEventType } from './canvas';
 import styles from './styles.module.scss';
@@ -60,6 +66,8 @@ export const VideoDetail = () => {
   const setInputMode =
     values.setInputMode as QuestionBoardProps['setInputMode'];
 
+  const [showStampBarChartModal, setShowStampBarChartModal] = useState(false);
+
   // TODO 回答保存・文字認識周りの処理
   const submitAnswer = async (data: {
     mode: 'keyboard' | 'touch';
@@ -89,6 +97,12 @@ export const VideoDetail = () => {
   const defaultQuestion =
     'どうがを見て、どんなことを思いましたか。\n書いてみましょう。';
   const question = values.question || defaultQuestion;
+
+  // TODO stamp周りのサーバー連携
+  const stampChartData = MOCK_STAMP_CHART_DATA;
+  const myStamps = MOCK_MY_STAMPS;
+  const submitDeleteStamps = async (time: number, stamps: StampType[]) => {};
+
   return (
     <>
       <Layout className={styles.main}>
@@ -128,11 +142,13 @@ export const VideoDetail = () => {
                     count={bestCount}
                     onClick={handleBestClick}
                   />
-                  {/* TODO 処理実装 */}
-                  <div className={styles.timer}>
+                  <button
+                    className={styles.timer}
+                    onClick={() => setShowStampBarChartModal(true)}
+                  >
                     <Timer />
                     <div>{`スタンプを\nおした じかん`}</div>
-                  </div>
+                  </button>
                 </div>
               </div>
             </div>
@@ -166,6 +182,13 @@ export const VideoDetail = () => {
             isTeacher={isTeacher}
           />
         </div>
+        <BarChartModal
+          isOpen={showStampBarChartModal}
+          onClose={() => setShowStampBarChartModal(false)}
+          data={stampChartData}
+          myStamps={myStamps}
+          submitDeleteStamp={submitDeleteStamps}
+        />
       </Layout>
       <WordModal wordHtml={word} onClose={closeWordModal} />
       <QuestionEditorModal
