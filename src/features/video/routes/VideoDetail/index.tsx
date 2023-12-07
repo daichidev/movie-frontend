@@ -60,6 +60,13 @@ export const VideoDetail = () => {
   const setInputMode =
     values.setInputMode as QuestionBoardProps['setInputMode'];
 
+  // TODO 回答保存・文字認識周りの処理
+  const submitAnswer = async (data: {
+    mode: 'keyboard' | 'touch';
+    text: string;
+    drawing: PlotEventType[];
+  }) => {};
+
   // TODO 「問い」更新周りのサーバー連携
   const isTeacher = true;
   const saveQuestion = async (data: {
@@ -154,6 +161,7 @@ export const VideoDetail = () => {
             setAnswerDrawing={
               setAnswerDrawing as QuestionBoardProps['setAnswerDrawing']
             }
+            submitAnswer={submitAnswer}
             editQuestion={openQuestionModal}
             isTeacher={isTeacher}
           />
@@ -180,6 +188,11 @@ type QuestionBoardProps = {
   setAnswerText: (answerText: string) => void;
   answerDrawing: PlotEventType[];
   setAnswerDrawing: (drawing: PlotEventType[]) => void;
+  submitAnswer: (data: {
+    mode: 'keyboard' | 'touch';
+    text: string;
+    drawing: PlotEventType[];
+  }) => void;
   isTeacher: boolean;
   editQuestion: () => void;
 };
@@ -191,13 +204,19 @@ const QuestionBoard = ({
   setAnswerText,
   answerDrawing,
   setAnswerDrawing,
+  submitAnswer,
   isTeacher,
   editQuestion,
 }: QuestionBoardProps) => {
   const canvasHandler = useRef<CanvasOperation | undefined>();
 
-  const submit = () => {
-    // TODO　回答保存処理
+  const submit = async () => {
+    if (!inputMode) return;
+    await submitAnswer({
+      mode: inputMode,
+      text: answerText,
+      drawing: answerDrawing,
+    });
     setInputMode(undefined);
   };
 
