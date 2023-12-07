@@ -1,17 +1,17 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "bootstrap/dist/css/bootstrap.css";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-import "./index.css";
-import { ProSidebarProvider } from "react-pro-sidebar";
+import 'bootstrap/dist/css/bootstrap.css';
+import ReactDOM from 'react-dom/client';
+import { ProSidebarProvider } from 'react-pro-sidebar';
+import App from './App';
+import './index.css';
+import reportWebVitals from './reportWebVitals';
+import './styles/fonts.css';
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
   <ProSidebarProvider>
     <App />
-  </ProSidebarProvider>
+  </ProSidebarProvider>,
   // </React.StrictMode>
 );
 
