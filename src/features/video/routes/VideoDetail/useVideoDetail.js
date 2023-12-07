@@ -30,6 +30,7 @@ export const useVideoDetail = () => {
   const [wordId, setWordId] = useState('');
 
   const [answerText, setAnswerText] = useState('');
+  const [answerDrawing, setAnswerDrawing] = useState([]); // canvas.PlotEventType[]
 
   const [normalCount, setNormalCount] = useState(0);
   const [goodCount, setGoodCount] = useState(0);
@@ -326,5 +327,7 @@ export const useVideoDetail = () => {
     setInputMode,
     answerText,
     setAnswerText,
+    answerDrawing,
+    setAnswerDrawing,
   };
 };

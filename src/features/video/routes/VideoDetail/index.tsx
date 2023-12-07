@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ReactNode, useEffect, useRef } from 'react';
+import { ReactNode, useRef } from 'react';
 import ReactPlayer from 'react-player';
 import { ReactComponent as Camera } from '../../../../assets/svgs/camera.svg';
 import { ReactComponent as Dictionary } from '../../../../assets/svgs/dictionary.svg';
@@ -17,6 +17,7 @@ import { ReactComponent as Timer } from '../../../../assets/svgs/timer.svg';
 import { ReactComponent as ToiBox } from '../../../../assets/svgs/toi_box.svg';
 import { Layout } from '../../../../components/Layout/Layout';
 import { WordModal } from '../../component/WordModal';
+import Canvas, { CanvasOperation, PlotEventType } from './canvas';
 import styles from './styles.module.scss';
 import { useVideoDetail } from './useVideoDetail';
 
@@ -38,6 +39,8 @@ export const VideoDetail = () => {
 
     answerText,
     setAnswerText,
+    answerDrawing,
+    setAnswerDrawing,
 
     ...values
   } = useVideoDetail();
@@ -115,6 +118,10 @@ export const VideoDetail = () => {
             setInputMode={setInputMode}
             answerText={answerText}
             setAnswerText={setAnswerText}
+            answerDrawing={answerDrawing}
+            setAnswerDrawing={
+              setAnswerDrawing as QuestionBoardProps['setAnswerDrawing']
+            }
           />
         </div>
       </Layout>
@@ -129,25 +136,24 @@ type QuestionBoardProps = {
   setInputMode: (mode: undefined | 'keyboard' | 'touch') => void;
   answerText: string;
   setAnswerText: (answerText: string) => void;
+  answerDrawing: PlotEventType[];
+  setAnswerDrawing: (drawing: PlotEventType[]) => void;
 };
 const QuestionBoard = ({
   inputMode,
   setInputMode,
   answerText,
   setAnswerText,
+  answerDrawing,
+  setAnswerDrawing,
 }: QuestionBoardProps) => {
-  const ref = useRef<HTMLCanvasElement>(null);
+  const canvasHandler = useRef<CanvasOperation | undefined>();
 
   const submit = () => {
     // TODO
     setInputMode(undefined);
   };
 
-  useEffect(() => {
-    if (!ref.current) return;
-    const canvas = ref.current;
-    // TODO　手書き入力
-  }, [ref]);
   return (
     <>
       <div
@@ -158,9 +164,19 @@ const QuestionBoard = ({
       >
         <div className={clsx(styles.container)}>
           <ToiBoxInstruction />
-          <div className={styles.form}>
-            {inputMode === 'touch' ? (
-              <canvas ref={ref} style={{ touchAction: 'pinch-zoom' }} />
+          <div className={clsx(styles.form, inputMode && styles.inputting)}>
+            {inputMode === 'touch' || answerDrawing?.length ? (
+              <Canvas
+                onEndDraw={setAnswerDrawing}
+                width={1440}
+                height={398}
+                top={0}
+                left={0}
+                phase={0}
+                functionListener={(handler) =>
+                  (canvasHandler.current = handler)
+                }
+              />
             ) : (
               <textarea
                 placeholder="「問いボックスにかいとうする」のボタンをおして、書いてみよう。"
@@ -171,11 +187,12 @@ const QuestionBoard = ({
               />
             )}
             {!inputMode &&
-              (answerText ? (
+              (answerText || answerDrawing?.length ? (
                 <button
                   className={styles.rewrite}
-                  // TODO 前回の入力モード
-                  onClick={() => setInputMode('keyboard')}
+                  onClick={() =>
+                    setInputMode(answerDrawing ? 'touch' : 'keyboard')
+                  }
                 >
                   <PenWhite />
                   かきなおす
@@ -258,11 +275,19 @@ const QuestionBoard = ({
         {/* TODO onClick */}
         {inputMode === 'touch' && (
           <div className={styles['touch-control']}>
-            <button>
+            <button
+              onClick={() => {
+                canvasHandler.current?.clear();
+              }}
+            >
               <EraserAll />
               ぜんぶけす
             </button>
-            <button>
+            <button
+              onClick={() => {
+                canvasHandler.current?.back();
+              }}
+            >
               <Eraser />
               ひとつけす
             </button>
