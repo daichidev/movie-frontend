@@ -40,6 +40,37 @@
     font-weight: 600;
     letter-spacing: 1.5px;
   }
+  .select-container {
+    position: relative;
+    background: #fff;
+    border-radius: 8px;
+    margin-right: 25px;
+
+    svg {
+      position: absolute;
+      top: 16px;
+      right: 12px;
+    }
+  }
+  select {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 42px;
+    padding: 0 12px;
+    border: 2px solid;
+    border-radius: 8px;
+    min-width: 380px;
+    background: transparent;
+
+    color: #333;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: 2px;
+    appearance: none;
+    cursor: pointer;
+  }
 }
 
 .body {

@@ -99,6 +99,14 @@ export const VideoDetail = () => {
   const question = values.question || defaultQuestion;
 
   // TODO stamp周りのサーバー連携
+  const classes = isTeacher
+    ? [
+        { gradeId: 2, class: '1' },
+        { gradeId: 2, class: '2' },
+        { gradeId: 2, class: '3' },
+      ]
+    : [];
+  const [classIndex, setClassIndex] = useState(0);
   const stampChartData = MOCK_STAMP_CHART_DATA;
   const myStamps = MOCK_MY_STAMPS;
   const submitDeleteStamps = async (time: number, stamps: StampType[]) => {};
@@ -188,6 +196,9 @@ export const VideoDetail = () => {
           data={stampChartData}
           myStamps={myStamps}
           submitDeleteStamp={submitDeleteStamps}
+          classes={classes}
+          classIndex={classIndex}
+          setClassIndex={setClassIndex}
         />
       </Layout>
       <WordModal wordHtml={word} onClose={closeWordModal} />

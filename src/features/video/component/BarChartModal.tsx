@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { useState } from 'react';
+import { ReactComponent as Arrow } from '../../../assets/svgs/arrow.svg';
 import { ReactComponent as Checkbox } from '../../../assets/svgs/checkbox.svg';
 import { ReactComponent as CloseAlt } from '../../../assets/svgs/close_alt.svg';
 import { ReactComponent as StampNormal } from '../../../assets/svgs/stamp1.svg';
@@ -12,10 +13,16 @@ import { StampBarChart, StampBarChartProps } from './StampBarChart';
 export type BarChartModalProps = {
   onClose: () => void;
   isOpen: boolean;
+  classes: { gradeId: number; class: string }[];
+  classIndex: number;
+  setClassIndex: (index: number) => void;
 } & Omit<StampBarChartProps, 'showDelete'>;
 export const BarChartModal = ({
   onClose,
   isOpen,
+  classIndex,
+  classes,
+  setClassIndex,
   submitDeleteStamp,
   ...props
 }: BarChartModalProps) => {
@@ -29,7 +36,13 @@ export const BarChartModal = ({
   return (
     <div>
       <div className={styles.container}>
-        <Header date={date} onClose={onClose} />
+        <Header
+          date={date}
+          onClose={onClose}
+          classes={classes}
+          classIndex={classIndex}
+          setClassIndex={setClassIndex}
+        />
         <div className={styles.body}>
           <Control showDelete={showDelete} setShowDelete={setShowDelete} />
           <div className={styles.chart}>
@@ -45,7 +58,19 @@ export const BarChartModal = ({
   );
 };
 
-const Header = ({ date, onClose }: { date: Date; onClose: VoidFunction }) => (
+const Header = ({
+  date,
+  onClose,
+  classes,
+  classIndex,
+  setClassIndex,
+}: {
+  date: Date;
+  onClose: VoidFunction;
+  classes: { gradeId: number; class: string }[];
+  classIndex: number;
+  setClassIndex: (index: number) => void;
+}) => (
   <div className={styles.header}>
     <div className={styles.date}>
       {date.getFullYear()}
@@ -64,6 +89,24 @@ const Header = ({ date, onClose }: { date: Date; onClose: VoidFunction }) => (
     <div className={styles.title}>
       クラスの みんなが スタンプを おした じかん
     </div>
+    {classes.length > 0 && (
+      <div className={styles['select-container']}>
+        <Arrow />
+        <select
+          value={classIndex}
+          onChange={(e) => setClassIndex(+e.target.value)}
+        >
+          {classes.map((e, i) => {
+            const label = `${e.gradeId}年${e.class}組`;
+            return (
+              <option key={i} value={i} label={label}>
+                {label}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+    )}
     <button onClick={onClose}>
       <CloseAlt />
     </button>
