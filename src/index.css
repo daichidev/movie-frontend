@@ -16,7 +16,8 @@
 } */
 
 body {
-  font-family: 'Noto Sans JP', sans-serif;
+  font-family: 'OT-PUDShinMGoPr6N', 'A-OTF UD Shin Maru Go Pr6N', 'Shin Maru Go',
+    'Noto Sans JP', sans-serif;
   display: grid;
   place-content: center;
   width: 100%;
