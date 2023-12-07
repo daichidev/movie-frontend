@@ -8,7 +8,7 @@ import { useVideoCard } from './useVideoCard';
 
 type VideoCardProps = {
   videoId: string;
-  gradeId: number;
+  gradeId: string | number | undefined;
   title: string;
   content: any;
   isClassic: boolean;
