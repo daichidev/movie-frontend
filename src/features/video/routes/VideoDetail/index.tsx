@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import { ReactNode, useRef, useState } from 'react';
-import ReactPlayer from 'react-player';
 import { ReactComponent as Camera } from '../../../../assets/svgs/camera.svg';
 import { ReactComponent as Dictionary } from '../../../../assets/svgs/dictionary.svg';
 import { ReactComponent as Eraser } from '../../../../assets/svgs/eraser.svg';
@@ -15,6 +14,7 @@ import { ReactComponent as StampBest } from '../../../../assets/svgs/stamp3.svg'
 import { ReactComponent as Star } from '../../../../assets/svgs/star.svg';
 import { ReactComponent as Timer } from '../../../../assets/svgs/timer.svg';
 import { ReactComponent as ToiBox } from '../../../../assets/svgs/toi_box.svg';
+import { CustomPlayer } from '../../../../components/CustomPlayer';
 import { Layout } from '../../../../components/Layout/Layout';
 import { BarChartModal } from '../../component/BarChartModal';
 import {
@@ -120,13 +120,10 @@ export const VideoDetail = () => {
               <p>どうがを みて、かんじた きもちの ボタンを おしましょう。</p>
               <div className={styles.row}>
                 <div className={styles.player}>
-                  {/* TODO　操作部のスタイル */}
-                  <ReactPlayer
+                  <CustomPlayer
                     ref={videoRef}
                     url={videoURL}
                     id="MainPlay"
-                    loop
-                    controls={true}
                     width="100%"
                     height="100%"
                   />

@@ -64,6 +64,8 @@
     column-gap: 40px;
   }
   .player {
+    display: flex;
+    align-items: flex-end;
     width: 690px;
     height: 450px;
   }
