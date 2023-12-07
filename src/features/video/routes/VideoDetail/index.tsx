@@ -60,7 +60,8 @@ export const VideoDetail = () => {
   const setInputMode =
     values.setInputMode as QuestionBoardProps['setInputMode'];
 
-  // TODO
+  // TODO 「問い」更新周りのサーバー連携
+  const isTeacher = true;
   const saveQuestion = async (data: {
     gradeId: number;
     class: string;
@@ -154,8 +155,7 @@ export const VideoDetail = () => {
               setAnswerDrawing as QuestionBoardProps['setAnswerDrawing']
             }
             editQuestion={openQuestionModal}
-            // TODO ユーザー区分取得
-            isTeacher
+            isTeacher={isTeacher}
           />
         </div>
       </Layout>
@@ -197,7 +197,7 @@ const QuestionBoard = ({
   const canvasHandler = useRef<CanvasOperation | undefined>();
 
   const submit = () => {
-    // TODO
+    // TODO　回答保存処理
     setInputMode(undefined);
   };
 
@@ -261,7 +261,6 @@ const QuestionBoard = ({
                   いボックスにかいとうする
                 </button>
               ))}
-            {/* TODO onClick */}
             {inputMode && (
               <div className={styles['submit-control']}>
                 {inputMode === 'keyboard' ? (
@@ -324,7 +323,6 @@ const QuestionBoard = ({
             </div>
           </div>
         )}
-        {/* TODO onClick */}
         {inputMode === 'touch' && (
           <div className={styles['touch-control']}>
             <button
@@ -347,7 +345,7 @@ const QuestionBoard = ({
         )}
       </div>
       {inputMode && (
-        // TODO onClick
+        // TODO きろくする と けってい/決定 の違いはなにか？
         <button className={styles.save} onClick={submit}>
           <Camera />
           きろくする

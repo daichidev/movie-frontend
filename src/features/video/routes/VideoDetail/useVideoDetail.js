@@ -318,7 +318,7 @@ export const useVideoDetail = () => {
     handleGoodClick,
     bestCount,
     handleBestClick,
-    // TODO
+
     wordsData,
     openWordModal,
     closeWordModal,

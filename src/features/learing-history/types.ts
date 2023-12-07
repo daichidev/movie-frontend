@@ -1,3 +1,4 @@
+// TODO 仕様確定次第反映
 export type LearningAction = 'login';
 // | 'grade_select'
 // | 'movie_select'
@@ -18,7 +19,7 @@ export type LearningHistoryDetails = {
     user_type: UserType;
     transition_source: TransitionSource;
     user_agent: string;
-    // TODO 仕様書:         "user_agent": "IPアドレス"
+    // note 仕様書:         "user_agent": "IPアドレス"
     ip_address: string;
   };
 };
@@ -28,8 +29,6 @@ export type UserType =
   | 2 //　教師
   | 9; // その他
 
-// TODO
 export type TransitionSource = any;
 
-// TODO enum values
 export type InputType = 'touch' | 'keyboard' | 'software-keyboard';

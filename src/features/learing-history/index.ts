@@ -14,7 +14,6 @@ type LearningHistoryPostRequest = {
 export const postLearningHistory = async <A extends LearningAction>(
   user_uuid: string,
   action: A,
-  // TODO
   detail: LearningHistoryDetails[A],
 ) => {
   const res = await axios.post<any, any, LearningHistoryPostRequest>(
