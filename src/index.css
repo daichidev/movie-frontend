@@ -17,10 +17,16 @@
 
 body {
   font-family: 'Noto Sans JP', sans-serif;
+  display: grid;
+  place-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  line-break: strict;
 
   ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 7px;
+    height: 7px;
   }
   ::-webkit-scrollbar-track {
     background-color: #d9d9d9;
@@ -28,27 +34,29 @@ body {
   }
   ::-webkit-scrollbar-thumb {
     background: #828282;
-    border-radius: 10px;
-    background-size: 10px 30px;
+    border-radius: 20px;
+    background-size: 7px;
   }
   ::-webkit-scrollbar-button {
     height: 100%;
   }
 }
+
 /* 
 body {
     font-family: 'Honoka', sans-serif;
 } */
 
 #root {
-  width: 100vw;
-  height: 100vh;
+  width: 1690px;
+  height: 1080px;
   margin: 0 auto;
   overflow: auto;
-  .main {
-    width: 100%;
-    height: 100%;
-  }
+}
+main {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 .modal-content {
   border: 3px solid #bbbbbb;

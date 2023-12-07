@@ -1,18 +1,7 @@
 .main {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-
-  background: linear-gradient(180deg, #fff2f2 0%, #ffdcdc 60%);
-
+  padding-top: 91px;
   .body {
-    margin: 91px auto 0;
-  }
-  .nav {
-    position: absolute;
-    top: 16px;
-    left: 7px;
-    bottom: 22px;
+    margin: 0 auto;
   }
 }
 

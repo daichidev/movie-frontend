@@ -1,37 +1,35 @@
-import { useParams } from "react-router-dom";
-import { Header } from "../../../components/Header/Header";
-import { MainLayout } from "../../../components/Layout";
-import "../../../styles/video/detail/index.scss";
-import StampNormalImg from "../../../assets/stamp1.png";
-import StampGoodImg from "../../../assets/stamp2.png";
-import StampBestImg from "../../../assets/stamp3.png";
-import BookImg from "../../../assets/book.png";
-import { StampButton } from "../component/StampButton";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faNavicon } from "@fortawesome/free-solid-svg-icons";
-import { CustomSpinner } from "../../upload/component/spinner";
-import { dummyWordData } from "../../../config";
-import { WordCard } from "../component/WordCard";
-import { useEffect, useRef, useState } from "react";
-import { QuestionModal } from "../../../components/Elements/QuestionModal";
-import { WordModal } from "../../../components/Elements/WordModal";
-import { Overlay } from "react-bootstrap";
-import { ChapterButton } from "../component/ChapterButton";
-import { StampCard } from "../component/StampCard";
-import { StampModal } from "../../../components/Elements/StampModal";
-import { InputSelectionModal } from "../../../components/Elements/InputSelectionModal";
-import { BarChart } from "../component/BarChart";
-import { KanjiText } from "../../../components/Elements/CustomText";
-import ReactPlayer from "react-player";
-import { default as JsxParser } from "html-react-parser";
-import { useDispatch, useSelector } from "react-redux";
-import { useGetWordsQuery } from "../../api/api-slice";
-import { useCreateStampMutation } from "../../api/api-slice";
+import { faNavicon } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { default as JsxParser } from 'html-react-parser';
+import { useEffect, useRef, useState } from 'react';
+import { Overlay } from 'react-bootstrap';
+import ReactPlayer from 'react-player';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import BookImg from '../../../assets/book.png';
+import StampNormalImg from '../../../assets/stamp1.png';
+import StampGoodImg from '../../../assets/stamp2.png';
+import StampBestImg from '../../../assets/stamp3.png';
+import { KanjiText } from '../../../components/Elements/CustomText';
+import { InputSelectionModal } from '../../../components/Elements/InputSelectionModal';
+import { QuestionModal } from '../../../components/Elements/QuestionModal';
+import { StampModal } from '../../../components/Elements/StampModal';
+import { WordModal } from '../../../components/Elements/WordModal';
+import { Header } from '../../../components/Header/Header';
+import { MainLayout } from '../../../components/Layout';
 import {
-  setVideoNormalCount,
-  setVideoGoodCount,
   setVideoBestCount,
-} from "../../../stores/store";
+  setVideoGoodCount,
+  setVideoNormalCount,
+} from '../../../stores/store';
+import '../../../styles/video/detail/index.scss';
+import { useCreateStampMutation, useGetWordsQuery } from '../../api/api-slice';
+import { CustomSpinner } from '../../upload/component/spinner';
+import { BarChart } from '../component/BarChart';
+import { ChapterButton } from '../component/ChapterButton';
+import { StampButton } from '../component/StampButton';
+import { StampCard } from '../component/StampCard';
+import { WordCard } from '../component/WordCard';
 
 export const VideoDetail = () => {
   const dispatch = useDispatch();
@@ -39,15 +37,15 @@ export const VideoDetail = () => {
   const { videoId, gradeId } = useParams();
   const [showQuestionModal, setShowQuestionModal] = useState(false);
   const [showWordModal, setShowWordModal] = useState(false);
-  const [word, setWord] = useState("");
+  const [word, setWord] = useState('');
   const [chpList, setChpList] = useState(false);
   const [stmpList, setStmpList] = useState(false);
   const [stmpClear, setStmpClear] = useState(false);
   const [inputSel, setInputSel] = useState(false);
   const [stmpGraph, setStmpGraph] = useState(false);
   const [stampHeaderStr, setStampHeaderStr] = useState(null);
-  const [videoURL, setVideoURL] = useState("");
-  const [wordId, setWordId] = useState("");
+  const [videoURL, setVideoURL] = useState('');
+  const [wordId, setWordId] = useState('');
 
   const [normalCount, setNormalCount] = useState(0);
   const [goodCount, setGoodCount] = useState(0);
@@ -60,9 +58,10 @@ export const VideoDetail = () => {
   const videoState = useSelector((state) => state.videos[videoId]);
 
   const { data: wordsData, isLoading } = useGetWordsQuery(wordId);
-  console.log("wordsData", wordsData);
+  console.log('wordsData', wordsData);
 
-  const [createStamp, { isLoading: stampLoading, isError }] = useCreateStampMutation();
+  const [createStamp, { isLoading: stampLoading, isError }] =
+    useCreateStampMutation();
 
   useEffect(() => {
     if (videoState) {
@@ -79,25 +78,26 @@ export const VideoDetail = () => {
       unit_id: videoId,
       category_id: 2,
     };
-    const url = "http://video-streaming-api.mastercode.jp:8000/videos/get_video";
+    const url =
+      'http://video-streaming-api.mastercode.jp:8000/videos/get_video';
     const queryParams = new URLSearchParams(params);
     const endpoint = `${url}?${queryParams}`;
     fetch(endpoint)
-          .then((response) => {
-            if (response.ok) {
-              console.log("response", response);
-              return response.json();
-            }
-            throw new Error("Network response was not ok");
-          })
-          .then((data) => {
-            console.log("Get Video successful:", data);
-            setVideoURL(data.video_url);
-            setWordId(data.video_id);
-          })  
-          .catch((error) => {
-            console.error("Get Video error:", error);
-          });
+      .then((response) => {
+        if (response.ok) {
+          console.log('response', response);
+          return response.json();
+        }
+        throw new Error('Network response was not ok');
+      })
+      .then((data) => {
+        console.log('Get Video successful:', data);
+        setVideoURL(data.video_url);
+        setWordId(data.video_id);
+      })
+      .catch((error) => {
+        console.error('Get Video error:', error);
+      });
   }, []);
 
   // useEffect(() => {
@@ -106,9 +106,9 @@ export const VideoDetail = () => {
 
   const saveStamps = async () => {
     const formData = new FormData();
-    
+
     if (videoState.question !== undefined) {
-      formData.append("question", videoState.question);
+      formData.append('question', videoState.question);
     }
     if (videoState.normalStamps !== undefined) {
       videoState.normalStamps.forEach((stamp, index) => {
@@ -125,9 +125,9 @@ export const VideoDetail = () => {
         formData.append('best_stamps', stamp);
       });
     }
-    console.log("formData", formData, "videoState", videoState)
+    console.log('formData', formData, 'videoState', videoState);
     const result = await createStamp(formData);
-  }
+  };
 
   const textRef = useRef(null);
   const chapterRef = useRef(null);
@@ -149,7 +149,7 @@ export const VideoDetail = () => {
 
   const closeWordModal = () => {
     setShowWordModal(false);
-    setWord("")
+    setWord('');
   };
 
   const closeStmpClearModal = () => {
@@ -180,19 +180,19 @@ export const VideoDetail = () => {
     let headerStr = self ? (
       <>
         <span>
-          <KanjiText title={"自"} pronun={"じ"} />
-          <KanjiText title={"分"} pronun={"ぶん"} />
+          <KanjiText title={'自'} pronun={'じ'} />
+          <KanjiText title={'分'} pronun={'ぶん'} />
           がスタンプをおした
-          <KanjiText title={"時"} pronun={"じ"} />
-          <KanjiText title={"間"} pronun={"かん"} />
+          <KanjiText title={'時'} pronun={'じ'} />
+          <KanjiText title={'間'} pronun={'かん'} />
         </span>
       </>
     ) : (
       <>
         <span>
           クラスのみんながスタンブをおした
-          <KanjiText title={"時"} pronun={"じ"} />
-          <KanjiText title={"間"} pronun={"かん"} />
+          <KanjiText title={'時'} pronun={'じ'} />
+          <KanjiText title={'間'} pronun={'かん'} />
         </span>
       </>
     );
@@ -204,15 +204,15 @@ export const VideoDetail = () => {
       let payload = normalCount + 1;
       setNormalCount(payload);
       const currentTIme = getCurrentTime();
-      console.log("currentTime", currentTIme);
+      console.log('currentTime', currentTIme);
       setNormalStamps([...normalStamps, currentTIme]);
-      console.log("normalStamps", normalStamps);
+      console.log('normalStamps', normalStamps);
       dispatch(
         setVideoNormalCount({
           videoId: videoId,
           count: payload,
           stamps: [...normalStamps, currentTIme],
-        })
+        }),
       );
     }
   };
@@ -228,7 +228,7 @@ export const VideoDetail = () => {
           videoId: videoId,
           count: payload,
           stamps: [...goodStamps, currentTIme],
-        })
+        }),
       );
     }
   };
@@ -245,7 +245,7 @@ export const VideoDetail = () => {
           videoId: videoId,
           count: payload,
           stamps: [...bestStamps, currentTIme],
-        })
+        }),
       );
     }
   };
@@ -264,20 +264,20 @@ export const VideoDetail = () => {
     fetch(
       `https://mastercode.jp/apps/api/dictionary/search/?mode=esjp&search_word=${text}&search_mode=exact`,
       {
-        method: "GET",
-      }
+        method: 'GET',
+      },
     )
       .then((response) => {
         if (response.ok) {
-          console.log("getWordId", response);
+          console.log('getWordId', response);
           return response.json();
         }
-        console.log("what is getWordId: ", response);
+        console.log('what is getWordId: ', response);
 
-        throw new Error("getWordId response was not ok");
+        throw new Error('getWordId response was not ok');
       })
       .then((data) => {
-        console.log("getWordId successful:", data);
+        console.log('getWordId successful:', data);
 
         let pattern = /showDetailUNI_(\d+)_search/;
 
@@ -288,40 +288,40 @@ export const VideoDetail = () => {
           console.log(extractedNumber);
           getWordContent(extractedNumber);
         } else {
-          console.log("No match found.");
+          console.log('No match found.');
         }
       })
       .catch((error) => {
-        console.error("getWordId error:", error);
+        console.error('getWordId error:', error);
       });
-  }
+  };
 
   const getWordContent = (id) => {
     fetch(
       `https://mastercode.jp/apps/api/dictionary/show_detail/?useruuid=AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHH&mode=esjp&id=${id}&referrer=1&invoker=spread&discard_zoom=discard`,
       {
-        method: "GET",
-      }
+        method: 'GET',
+      },
     )
       .then((response) => {
         if (response.ok) {
-          console.log("getWordContent", response);
+          console.log('getWordContent', response);
           return response.json();
         }
-        console.log("what is getWordContent: ", response);
+        console.log('what is getWordContent: ', response);
 
-        throw new Error("getWordContent response was not ok");
+        throw new Error('getWordContent response was not ok');
       })
       .then((data) => {
-        console.log("getWordContent successful:", data);
-        let temp = data.arg1
-        setWord(temp)
+        console.log('getWordContent successful:', data);
+        let temp = data.arg1;
+        setWord(temp);
       })
       .catch((error) => {
-        console.error("getWordContent error:", error);
-        setWord(error)
+        console.error('getWordContent error:', error);
+        setWord(error);
       });
-  }
+  };
 
   return (
     <MainLayout>
@@ -370,11 +370,11 @@ export const VideoDetail = () => {
                       <ChapterButton
                         children={
                           <span>
-                            <KanjiText title={"自"} pronun={"じ"} />
-                            <KanjiText title={"分"} pronun={"ぶん"} />
+                            <KanjiText title={'自'} pronun={'じ'} />
+                            <KanjiText title={'分'} pronun={'ぶん'} />
                             がスタンプをおした
-                            <KanjiText title={"時"} pronun={"じ"} />
-                            <KanjiText title={"間"} pronun={"かん"} />
+                            <KanjiText title={'時'} pronun={'じ'} />
+                            <KanjiText title={'間'} pronun={'かん'} />
                           </span>
                         }
                         onClick={() => handleStamps(true)}
@@ -386,8 +386,8 @@ export const VideoDetail = () => {
                             <br />
                             <span>
                               スタンブをおした
-                              <KanjiText title={"時"} pronun={"じ"} />
-                              <KanjiText title={"間"} pronun={"かん"} />
+                              <KanjiText title={'時'} pronun={'じ'} />
+                              <KanjiText title={'間'} pronun={'かん'} />
                             </span>
                           </>
                         }
@@ -428,10 +428,10 @@ export const VideoDetail = () => {
                         onClick={() => setStmpClear(true)}
                       >
                         <span>
-                          <KanjiText title={"時"} pronun={"じ"} />
-                          <KanjiText title={"間"} pronun={"かん"} />
+                          <KanjiText title={'時'} pronun={'じ'} />
+                          <KanjiText title={'間'} pronun={'かん'} />
                           を
-                          <KanjiText title={"消"} pronun={"け"} />す
+                          <KanjiText title={'消'} pronun={'け'} />す
                         </span>
                       </div>
                     </div>
@@ -456,9 +456,7 @@ export const VideoDetail = () => {
             <div className="col-6 video-box">
               <ReactPlayer
                 ref={videoRef}
-                url={
-                  videoURL
-                }
+                url={videoURL}
                 id="MainPlay"
                 loop
                 controls={true}
@@ -474,7 +472,7 @@ export const VideoDetail = () => {
                       <span>
                         どうがに　
                         <>
-                          <KanjiText title={"出"} pronun={"で"} />
+                          <KanjiText title={'出'} pronun={'で'} />
                         </>
                         てくる
                       </span>
@@ -487,34 +485,37 @@ export const VideoDetail = () => {
                   <div className="col-7">
                     <span>
                       <>
-                        <KanjiText title={"下"} pronun={"した"} />
+                        <KanjiText title={'下'} pronun={'した'} />
                       </>
                       の ことばを おすと、いみを たしかめることが できるよ。
                     </span>
                   </div>
                 </div>
               </div>
-              {
-                isLoading ? <div
-                style={{
-                  width: "100%",
-                  height: "30vh",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <CustomSpinner></CustomSpinner>
-              </div> : <div className="word-list">
-                {wordsData && wordsData.map((element) => (
-                  <WordCard
-                    key={element.id}
-                    text={element.word_text}
-                    onClick={() => openWordModal(element.word_text)}
-                  ></WordCard>
-                ))}
-              </div>
-              }
+              {isLoading ? (
+                <div
+                  style={{
+                    width: '100%',
+                    height: '30vh',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <CustomSpinner></CustomSpinner>
+                </div>
+              ) : (
+                <div className="word-list">
+                  {wordsData &&
+                    wordsData.map((element) => (
+                      <WordCard
+                        key={element.id}
+                        text={element.word_text}
+                        onClick={() => openWordModal(element.word_text)}
+                      ></WordCard>
+                    ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -524,7 +525,7 @@ export const VideoDetail = () => {
               <div className="col-11 left">
                 <button>
                   <>
-                    <KanjiText title={"問"} pronun={"と"} />
+                    <KanjiText title={'問'} pronun={'と'} />
                   </>
                   い
                   <br />
@@ -564,7 +565,7 @@ export const VideoDetail = () => {
         <QuestionModal
           showModal={showQuestionModal}
           onClose={closeQuestionModal}
-          text={""}
+          text={''}
         />
       </div>
       <div className="modal-word">

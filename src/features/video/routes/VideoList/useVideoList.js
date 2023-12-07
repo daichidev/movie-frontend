@@ -45,6 +45,8 @@ export const useVideoList = () => {
   // }
   return {
     videoList: dummyData,
-    gradeId: c_level,
+    genre: level,
+    // TODO　学年以外の場合のID値は？
+    gradeId: level,
   };
 };
