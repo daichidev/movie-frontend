@@ -176,6 +176,7 @@ const QuestionBoard = ({
                 functionListener={(handler) =>
                   (canvasHandler.current = handler)
                 }
+                plotEvents={answerDrawing || []}
               />
             ) : (
               <textarea

@@ -8,12 +8,6 @@ import React, {
   useState,
 } from 'react';
 
-interface Window {
-  plotEvents: PlotEventType[];
-  navigator: Navigator;
-}
-declare let window: Window;
-
 export interface CanvasPropType {
   width: number;
   height: number;
@@ -23,6 +17,7 @@ export interface CanvasPropType {
   phase: number;
   // 描き終えた時点で持ってる全ての筆跡をコールバックする
   onEndDraw: (plotEvents: PlotEventType[]) => void;
+  plotEvents: PlotEventType[];
 }
 
 export interface CanvasOperation {
@@ -38,6 +33,7 @@ export interface PlotEventType {
 
 const Canvas = (props: CanvasPropType) => {
   const [drawing, setDrawing] = useState(false);
+  const plotEvents = useRef<PlotEventType[]>(props.plotEvents);
   const browser = detect();
 
   const { width, height } = props;
@@ -102,7 +98,7 @@ const Canvas = (props: CanvasPropType) => {
   const mouseDown: MouseEventHandler = (
     e: React.MouseEvent<HTMLInputElement>,
   ) => {
-    if (window.plotEvents && props.phase === 0) {
+    if (plotEvents.current && props.phase === 0) {
       const { offsetX: x, offsetY: y } = e.nativeEvent;
       //console.log(`start - clientX: ${x}; clientY: ${y}`);
       setDrawing(true);
@@ -115,7 +111,7 @@ const Canvas = (props: CanvasPropType) => {
         y: zoomedY,
       } as PlotEventType;
       draw(zoomedX, zoomedY);
-      window.plotEvents = [...window.plotEvents, plotEvent];
+      plotEvents.current = [...plotEvents.current, plotEvent];
     }
   };
 
@@ -123,7 +119,7 @@ const Canvas = (props: CanvasPropType) => {
   const mouseMove: MouseEventHandler = (
     e: React.MouseEvent<HTMLInputElement>,
   ) => {
-    if (drawing && window.plotEvents && props.phase === 0) {
+    if (drawing && plotEvents.current && props.phase === 0) {
       const { offsetX: x, offsetY: y } = e.nativeEvent;
       //console.log(`move - clientX: ${x}; clientY: ${y}`);
       const zoom = _getZoom();
@@ -135,19 +131,19 @@ const Canvas = (props: CanvasPropType) => {
         y: zoomedY,
       } as PlotEventType;
       draw(zoomedX, zoomedY);
-      window.plotEvents = [...window.plotEvents, plotEvent];
+      plotEvents.current = [...plotEvents.current, plotEvent];
     }
   };
 
   // 線描画完了
   const endDrawing = () => {
-    if (drawing && window.plotEvents && props.phase === 0) {
+    if (drawing && plotEvents.current && props.phase === 0) {
       //console.log('end');
       setDrawing(false);
       const plotEvent = { action: 'end' };
       //draw(mouseX ?? 0, mouseY ?? 0);
-      window.plotEvents = [...window.plotEvents, plotEvent];
-      props.onEndDraw(window.plotEvents);
+      plotEvents.current = [...plotEvents.current, plotEvent];
+      props.onEndDraw(plotEvents.current);
     }
   };
 
@@ -177,7 +173,7 @@ const Canvas = (props: CanvasPropType) => {
   ) => {
     e.preventDefault();
     //console.log('called react-dom onTouchStart');
-    if (window.plotEvents && props.phase === 0) {
+    if (plotEvents.current && props.phase === 0) {
       const position = _getFinderPosition(e);
       //console.log(`start - clientX: ${position.x}; clientY: ${position.y}`);
       /*if (clientPos && adjustPlot) {
@@ -195,7 +191,7 @@ const Canvas = (props: CanvasPropType) => {
         y: zoomedY,
       } as PlotEventType;
       draw(zoomedX, zoomedY);
-      window.plotEvents = [...window.plotEvents, plotEvent];
+      plotEvents.current = [...plotEvents.current, plotEvent];
     }
   };
 
@@ -204,7 +200,7 @@ const Canvas = (props: CanvasPropType) => {
     e: React.TouchEvent<HTMLInputElement>,
   ) => {
     e.preventDefault();
-    if (drawing && window.plotEvents && props.phase === 0) {
+    if (drawing && plotEvents.current && props.phase === 0) {
       const position = _getFinderPosition(e);
       //console.log(`move - clientX: ${position.x}; clientY: ${position.y}`);
       /*if (clientPos && adjustPlot) {
@@ -221,8 +217,7 @@ const Canvas = (props: CanvasPropType) => {
         y: zoomedY,
       } as PlotEventType;
       draw(zoomedX, zoomedY);
-      window.plotEvents = [...window.plotEvents, plotEvent];
-      console.log(e);
+      plotEvents.current = [...plotEvents.current, plotEvent];
     }
   };
 
@@ -231,28 +226,28 @@ const Canvas = (props: CanvasPropType) => {
     e: React.TouchEvent<HTMLInputElement>,
   ) => {
     e.preventDefault();
-    if (drawing && window.plotEvents && props.phase === 0) {
+    if (drawing && plotEvents.current && props.phase === 0) {
       //console.log('end');
       setDrawing(false);
       const plotEvent = { action: 'end' };
       //draw(mouseX ?? 0, mouseY ?? 0);
-      window.plotEvents = [...window.plotEvents, plotEvent];
-      props.onEndDraw(window.plotEvents);
+      plotEvents.current = [...plotEvents.current, plotEvent];
+      props.onEndDraw(plotEvents.current);
     }
   };
 
   const draw = (x: number, y: number) => {
-    if (window.plotEvents) {
+    if (plotEvents.current) {
       const ctx = getContext();
       ctx.beginPath();
       ctx.globalAlpha = 1.0;
       if (
-        window.plotEvents.length === 0 ||
-        window.plotEvents[window.plotEvents.length - 1].action === 'end'
+        plotEvents.current.length === 0 ||
+        plotEvents.current[plotEvents.current.length - 1].action === 'end'
       ) {
         ctx.moveTo(x, y);
       } else {
-        const plotEvent = window.plotEvents[window.plotEvents.length - 1];
+        const plotEvent = plotEvents.current[plotEvents.current.length - 1];
         if (plotEvent.x !== undefined && plotEvent.y !== undefined) {
           ctx.moveTo(plotEvent.x, plotEvent.y);
         }
@@ -266,8 +261,8 @@ const Canvas = (props: CanvasPropType) => {
   };
 
   const _back = useCallback(async () => {
-    if (window.plotEvents) {
-      const work = [...window.plotEvents.reverse()];
+    if (plotEvents.current) {
+      const work = [...plotEvents.current.reverse()];
       const qty = work.length;
       for (let index = 0; index < qty; index++) {
         const element = work[index];
@@ -295,7 +290,7 @@ const Canvas = (props: CanvasPropType) => {
       ctx.lineWidth = 10;
       ctx.strokeStyle = '#000000';
       ctx.stroke();
-      window.plotEvents = work;
+      plotEvents.current = work;
     }
     // eslint-disable-next-line
   }, []);
@@ -303,13 +298,13 @@ const Canvas = (props: CanvasPropType) => {
   const _reset = useCallback(() => {
     const ctx = getContext();
     ctx.clearRect(0, 0, width, height);
-    window.plotEvents = [];
+    plotEvents.current = [];
     // eslint-disable-next-line
   }, []);
 
   const _redraw = async () => {
-    if (window.plotEvents) {
-      const work = [...window.plotEvents];
+    if (plotEvents.current) {
+      const work = [...plotEvents.current];
       const ctx = getContext();
       ctx.clearRect(0, 0, width, height);
       for (const element of work) {
