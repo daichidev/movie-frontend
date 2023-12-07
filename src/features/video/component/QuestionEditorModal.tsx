@@ -1,5 +1,6 @@
 import { Modal as MuiModal } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { ReactComponent as Arrow } from '../../../assets/svgs/arrow.svg';
 import { ReactComponent as ToiBox } from '../../../assets/svgs/toi_box.svg';
 import styles from './QuestionEditorModal.module.scss';
 
@@ -44,20 +45,24 @@ export const QuestionEditorModal = ({
       <div className={styles.outer} onClick={() => onClose()}>
         <div className={styles.container} onClick={(e) => e.stopPropagation()}>
           <div className={styles.header}>
-            <select
-              value={classIndex}
-              onChange={(e) => setClassIndex(+e.target.value)}
-            >
-              {questionsByClass?.map((element, i) => (
-                <option
-                  key={element.class}
-                  label={`${element.gradeId}年${element.class}`}
-                  value={i}
-                >
-                  {`${element.gradeId}年${element.class}`}
-                </option>
-              ))}
-            </select>
+            <div className={styles['select-container']}>
+              <Arrow />
+              <select
+                id="select"
+                value={classIndex}
+                onChange={(e) => setClassIndex(+e.target.value)}
+              >
+                {questionsByClass?.map((element, i) => (
+                  <option
+                    key={element.class}
+                    label={`${element.gradeId}年${element.class}`}
+                    value={i}
+                  >
+                    {`${element.gradeId}年${element.class}`}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
           <div className={styles.body}>
             <div className={styles.content}>

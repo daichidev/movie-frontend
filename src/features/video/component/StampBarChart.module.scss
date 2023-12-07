@@ -1,0 +1,109 @@
+.container {
+  position: relative;
+}
+
+.stamp-position {
+  position: absolute;
+  top: 228px;
+  left: 211.5px;
+}
+.container {
+  position: relative;
+  svg.normal {
+    fill: #ffbb00;
+  }
+  svg.good {
+    fill: #259f11;
+  }
+  svg.best {
+    fill: #0a93f5;
+  }
+  > .stamp {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    stroke: #fff;
+    filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.5));
+    &:nth-child(1) {
+      top: 0;
+    }
+    &:nth-child(2) {
+      top: 14px;
+    }
+    &:nth-child(3) {
+      top: 28px;
+    }
+  }
+  .delete {
+    top: 0;
+    transform: translate(-8px, -95%);
+    &:hover {
+      filter: brightness(1.16);
+    }
+  }
+  .delete-popup {
+    position: absolute;
+    bottom: 2px;
+    left: -45px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    row-gap: 18px;
+
+    width: 142px;
+    padding: 16px 0;
+    border: 1px solid #ffffff;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #fff2f2 0%, #ffdcdc 60%);
+    box-shadow: 0px 2px 6px 0px #000000b2;
+
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      column-gap: 10px;
+      button svg {
+        width: 45px;
+        height: 45px;
+      }
+
+      .stamp {
+        width: 32px;
+        height: 32px;
+        stroke: #fff;
+        filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.5));
+        &.deleting {
+          fill: #999999;
+        }
+      }
+      &:hover {
+        button {
+          filter: brightness(1.16);
+        }
+      }
+    }
+    > .submit {
+      width: 90px;
+      height: 48px;
+      flex-shrink: 0;
+      border-radius: 16px;
+      border: 0.7px solid #fff;
+      background: var(
+        --default,
+        linear-gradient(180deg, #29abe2 5.21%, #0171bd 100%)
+      );
+      box-shadow: 0px 0.7px 2.1px 0px rgba(0, 0, 0, 0.7);
+      color: #fff;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 35px;
+      letter-spacing: 2.7px;
+
+      &:hover {
+        background: linear-gradient(180deg, #66d2ff 12.03%, #019bff 89.47%);
+      }
+    }
+  }
+}
