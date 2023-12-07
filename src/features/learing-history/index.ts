@@ -1,6 +1,5 @@
-import axios from 'axios';
+import { apiClientInstance } from '../../utils/auth/helpers/apiClient/instance';
 import { formatHistoricalDate } from '../../utils/date';
-import { LEARNING_HISTORY_API_URL } from '../../utils/env';
 import { LearningAction, LearningHistoryDetails } from './types';
 export * from './types';
 
@@ -16,15 +15,16 @@ export const postLearningHistory = async <A extends LearningAction>(
   action: A,
   detail: LearningHistoryDetails[A],
 ) => {
-  const res = await axios.post<any, any, LearningHistoryPostRequest>(
-    '/apps/api/learning-history/Prod/movie',
-    {
-      user_uuid,
-      historical_date: formatHistoricalDate(new Date()),
-      action,
-      detail,
-    },
-    { baseURL: LEARNING_HISTORY_API_URL },
-  );
+  const data: LearningHistoryPostRequest = {
+    user_uuid,
+    historical_date: formatHistoricalDate(new Date()),
+    action,
+    detail,
+  };
+  const res = await apiClientInstance({
+    url: '/apps/api/learning-history/Prod/movie',
+    method: 'post',
+    data,
+  });
   return res.data;
 };
