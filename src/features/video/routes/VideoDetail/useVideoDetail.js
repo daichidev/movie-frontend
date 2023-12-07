@@ -310,6 +310,7 @@ export const useVideoDetail = () => {
   return {
     videoRef,
     videoURL,
+    question: videoState?.question,
 
     normalCount,
     handleNormalClick,
@@ -329,5 +330,9 @@ export const useVideoDetail = () => {
     setAnswerText,
     answerDrawing,
     setAnswerDrawing,
+
+    openQuestionModal,
+    closeQuestionModal,
+    showQuestionModal,
   };
 };

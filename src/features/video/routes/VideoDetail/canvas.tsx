@@ -291,6 +291,7 @@ const Canvas = (props: CanvasPropType) => {
       ctx.strokeStyle = '#000000';
       ctx.stroke();
       plotEvents.current = work;
+      props.onEndDraw(plotEvents.current);
     }
     // eslint-disable-next-line
   }, []);
@@ -299,6 +300,7 @@ const Canvas = (props: CanvasPropType) => {
     const ctx = getContext();
     ctx.clearRect(0, 0, width, height);
     plotEvents.current = [];
+    props.onEndDraw(plotEvents.current);
     // eslint-disable-next-line
   }, []);
 

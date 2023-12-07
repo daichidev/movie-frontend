@@ -16,6 +16,10 @@ import { ReactComponent as Star } from '../../../../assets/svgs/star.svg';
 import { ReactComponent as Timer } from '../../../../assets/svgs/timer.svg';
 import { ReactComponent as ToiBox } from '../../../../assets/svgs/toi_box.svg';
 import { Layout } from '../../../../components/Layout/Layout';
+import {
+  QuestionEditorModal,
+  QuestionEditorModalProps,
+} from '../../component/QuestionEditorModal';
 import { WordModal } from '../../component/WordModal';
 import Canvas, { CanvasOperation, PlotEventType } from './canvas';
 import styles from './styles.module.scss';
@@ -42,6 +46,10 @@ export const VideoDetail = () => {
     answerDrawing,
     setAnswerDrawing,
 
+    showQuestionModal,
+    openQuestionModal,
+    closeQuestionModal,
+
     ...values
   } = useVideoDetail();
   const wordsData = (values.wordsData || []) as {
@@ -51,6 +59,28 @@ export const VideoDetail = () => {
   const inputMode = values.inputMode as QuestionBoardProps['inputMode'];
   const setInputMode =
     values.setInputMode as QuestionBoardProps['setInputMode'];
+
+  // TODO
+  const saveQuestion = async (data: {
+    gradeId: number;
+    class: string;
+    question: string;
+  }) => {};
+  const questionByClass: QuestionEditorModalProps['questionsByClass'] = [
+    {
+      gradeId: 2,
+      class: '1組',
+      question: 'どうがを見て、どんなことを思いましたか。',
+    },
+    {
+      gradeId: 2,
+      class: '2組',
+      question: 'どうがを見て、どんなことを思いませんでしたか。',
+    },
+  ];
+  const defaultQuestion =
+    'どうがを見て、どんなことを思いましたか。\n書いてみましょう。';
+  const question = values.question || defaultQuestion;
   return (
     <>
       <Layout className={styles.main}>
@@ -114,6 +144,7 @@ export const VideoDetail = () => {
             </div>
           </div>
           <QuestionBoard
+            question={question}
             inputMode={inputMode}
             setInputMode={setInputMode}
             answerText={answerText}
@@ -122,30 +153,46 @@ export const VideoDetail = () => {
             setAnswerDrawing={
               setAnswerDrawing as QuestionBoardProps['setAnswerDrawing']
             }
+            editQuestion={openQuestionModal}
+            // TODO ユーザー区分取得
+            isTeacher
           />
         </div>
       </Layout>
       <WordModal wordHtml={word} onClose={closeWordModal} />
+      <QuestionEditorModal
+        isOpen={showQuestionModal}
+        onClose={closeQuestionModal}
+        submit={saveQuestion}
+        questionsByClass={questionByClass}
+        defaultQuestion={defaultQuestion}
+      />
     </>
   );
 };
 
 const MAX_LENGTH = 150;
 type QuestionBoardProps = {
+  question: string;
   inputMode: undefined | 'keyboard' | 'touch';
   setInputMode: (mode: undefined | 'keyboard' | 'touch') => void;
   answerText: string;
   setAnswerText: (answerText: string) => void;
   answerDrawing: PlotEventType[];
   setAnswerDrawing: (drawing: PlotEventType[]) => void;
+  isTeacher: boolean;
+  editQuestion: () => void;
 };
 const QuestionBoard = ({
+  question,
   inputMode,
   setInputMode,
   answerText,
   setAnswerText,
   answerDrawing,
   setAnswerDrawing,
+  isTeacher,
+  editQuestion,
 }: QuestionBoardProps) => {
   const canvasHandler = useRef<CanvasOperation | undefined>();
 
@@ -163,13 +210,17 @@ const QuestionBoard = ({
         )}
       >
         <div className={clsx(styles.container)}>
-          <ToiBoxInstruction />
+          <ToiBoxInstruction
+            question={question}
+            isTeacher={isTeacher}
+            editQuestion={editQuestion}
+          />
           <div className={clsx(styles.form, inputMode && styles.inputting)}>
             {inputMode === 'touch' || answerDrawing?.length ? (
               <Canvas
                 onEndDraw={setAnswerDrawing}
                 width={1440}
-                height={398}
+                height={408}
                 top={0}
                 left={0}
                 phase={0}
@@ -364,7 +415,15 @@ const WordsInstruction = () => (
   </div>
 );
 
-const ToiBoxInstruction = () => (
+const ToiBoxInstruction = ({
+  question,
+  isTeacher,
+  editQuestion,
+}: {
+  question: string;
+  isTeacher: boolean;
+  editQuestion: () => void;
+}) => (
   <div className={styles.instruction}>
     <div>
       <ToiBox />
@@ -375,21 +434,12 @@ const ToiBoxInstruction = () => (
         いボックス
       </div>
     </div>
-    <p>
-      どうがを
-      <ruby>
-        見<rt>み</rt>
-      </ruby>
-      て、どんなことを{' '}
-      <ruby>
-        思<rt>おも</rt>
-      </ruby>
-      いましたか。
-      <br />
-      <ruby>
-        書<rt>か</rt>
-      </ruby>
-      いてみましょう。
-    </p>
+    <p>{question}</p>
+    {isTeacher && (
+      <button className={styles['edit-question']} onClick={editQuestion}>
+        <div>教師用</div>
+        <div>{`問いを\n編集する`}</div>
+      </button>
+    )}
   </div>
 );
