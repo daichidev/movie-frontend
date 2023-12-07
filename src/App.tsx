@@ -16,13 +16,13 @@ authConfig.mainPageUrl = '/movie';
 function App() {
   return (
     <ScalingProvider>
-      <AuthProvider>
-        <Provider store={store}>
-          <BrowserRouter basename="movie">
-            <AppRoutes></AppRoutes>
-          </BrowserRouter>
-        </Provider>
-      </AuthProvider>
+      <Provider store={store}>
+        <BrowserRouter basename="movie">
+          <AuthProvider>
+            <AppRoutes />
+          </AuthProvider>
+        </BrowserRouter>
+      </Provider>
     </ScalingProvider>
   );
 }
