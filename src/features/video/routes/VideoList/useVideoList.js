@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetUnitsQuery } from '../../../api/api-slice';
 
 export const useVideoList = () => {
   const { level } = useParams();
-  let c_level = 4;
+  const [c_level, setCLevel] = useState(0);
+  const [c_loading, setCLoading] = useState(true);
 
   let params = {
     level: level + '年',
@@ -15,6 +17,7 @@ export const useVideoList = () => {
   const endpoint = `${url}?${queryParams}`;
   fetch(endpoint)
     .then((response) => {
+      setCLoading(false);
       if (response.ok) {
         console.log('response', response);
         return response.json();
@@ -23,13 +26,13 @@ export const useVideoList = () => {
     })
     .then((data) => {
       console.log('Upload successful:', data);
-      c_level = data.grade_id;
+      setCLevel(data.grade_id);
     })
     .catch((error) => {
       console.error('Upload error:', error);
     });
 
-  const { data: unitsData, isLoading } = useGetUnitsQuery(c_level);
+  const { data: unitsData, isLoading, refetch } = useGetUnitsQuery(c_level);
 
   let dummyData = [];
   if (unitsData) {
@@ -48,5 +51,6 @@ export const useVideoList = () => {
     genre: level,
     // TODO　学年以外の場合のID値は？
     gradeId: level,
+    isLoading: c_loading ? c_loading : isLoading,
   };
 };

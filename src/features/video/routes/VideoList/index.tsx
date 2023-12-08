@@ -7,7 +7,7 @@ import styles from './styles.module.scss';
 import { useVideoList } from './useVideoList';
 
 export const VideoList = () => {
-  const { videoList, genre, gradeId } = useVideoList();
+  const { videoList, genre, gradeId, isLoading } = useVideoList();
   return (
     <Layout className={styles.main}>
       <div className={styles.body}>
@@ -23,7 +23,7 @@ export const VideoList = () => {
         </div>
         <hr />
         <ul className={styles.list}>
-          {videoList.map((element) => {
+          {!isLoading ? videoList.map((element) => {
             return (
               <li>
                 <VideoCard
@@ -36,7 +36,7 @@ export const VideoList = () => {
                 />
               </li>
             );
-          })}
+          }) : <span>ロード中...</span>}
         </ul>
       </div>
     </Layout>
