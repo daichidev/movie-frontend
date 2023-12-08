@@ -16,6 +16,7 @@ import { ReactComponent as Star } from '../../../../assets/svgs/star.svg';
 import { ReactComponent as Timer } from '../../../../assets/svgs/timer.svg';
 import { ReactComponent as ToiBox } from '../../../../assets/svgs/toi_box.svg';
 import { Layout } from '../../../../components/Layout/Layout';
+import { useAuthContext } from '../../../../utils/auth/middleware/auth/AuthContext';
 import { BarChartModal } from '../../component/BarChartModal';
 import {
   QuestionEditorModal,
@@ -32,6 +33,9 @@ import styles from './styles.module.scss';
 import { useVideoDetail } from './useVideoDetail';
 
 export const VideoDetail = () => {
+  const auth = useAuthContext();
+  const isTeacher = auth.isTeacher?.() || false;
+
   const {
     videoRef,
     videoURL,
@@ -76,7 +80,6 @@ export const VideoDetail = () => {
   }) => {};
 
   // TODO 「問い」更新周りのサーバー連携
-  const isTeacher = true;
   const saveQuestion = async (data: {
     gradeId: number;
     class: string;
