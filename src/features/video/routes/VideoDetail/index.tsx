@@ -15,7 +15,7 @@ import { ReactComponent as Star } from '../../../../assets/svgs/star.svg';
 import { ReactComponent as Timer } from '../../../../assets/svgs/timer.svg';
 import { ReactComponent as ToiBox } from '../../../../assets/svgs/toi_box.svg';
 import { CustomPlayer } from '../../../../components/CustomPlayer';
-import { Layout } from '../../../../components/Layout/Layout';
+import { Layout } from '../../../../components/Layout';
 import { useAuthContext } from '../../../../utils/auth/middleware/auth/AuthContext';
 import { BarChartModal } from '../../component/BarChartModal';
 import {

@@ -1,17 +1,12 @@
-import { Route, Routes } from "react-router-dom";
-import { VideoList } from "./VideoList";
-import { VideoDetail } from "./VideoDetail";
-import { QuestionEdit } from "./QuestionEdit";
+import { Route, Routes } from 'react-router-dom';
+import { VideoDetail } from './VideoDetail';
+import { VideoList } from './VideoList';
 
 export const VideoRoutes = () => {
   return (
     <Routes>
       <Route path="/:level" element={<VideoList />} />
       <Route path="/detail/:videoId/:gradeId" element={<VideoDetail />} />
-      <Route
-        path="/detail/:videoId/question/:isTyping"
-        element={<QuestionEdit />}
-      />
     </Routes>
   );
 };
