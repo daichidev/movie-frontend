@@ -126,11 +126,11 @@ export const VideoDetail = () => {
                 <StampForm
                   className={styles['stamp-form']}
                   normalCount={normalCount}
-                  handleNormalClick={handleNormalClick}
+                  handleNormalClick={handleNormalClick as () => Promise<void>}
                   goodCount={goodCount}
-                  handleGoodClick={handleGoodClick}
+                  handleGoodClick={handleGoodClick as () => Promise<void>}
                   bestCount={bestCount}
-                  handleBestClick={handleBestClick}
+                  handleBestClick={handleBestClick as () => Promise<void>}
                   showStampBarChartModal={() => setShowStampBarChartModal(true)}
                 />
               </div>

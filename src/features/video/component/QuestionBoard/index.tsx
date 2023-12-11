@@ -12,6 +12,7 @@ import Canvas, {
   CanvasOperation,
   PlotEventType,
 } from '../../../../components/DrawingCanvas';
+import { PrimaryButton } from '../../../../components/Elements/Button';
 import styles from './styles.module.scss';
 
 const ANSWER_MAX_LENGTH = 150;
@@ -134,10 +135,10 @@ export const QuestionBoard = ({
       </div>
       {inputMode && (
         // TODO きろくする と けってい/決定 の違いはなにか？
-        <button className={styles.save} onClick={submit}>
+        <PrimaryButton className={styles.save} onClick={submit}>
           <Camera />
           きろくする
-        </button>
+        </PrimaryButton>
       )}
     </>
   );
@@ -189,6 +190,7 @@ const InputControl = ({
     <div
       className={clsx(
         styles['button-container'],
+        styles.keyboard,
         inputMode === 'keyboard' && styles.active,
       )}
     >
@@ -200,16 +202,17 @@ const InputControl = ({
     <div
       className={clsx(
         styles['button-container'],
+        styles.touch,
         inputMode === 'touch' && styles.active,
       )}
     >
-      <button onClick={() => setInputMode('touch')}>
+      <PrimaryButton onClick={() => setInputMode('touch')}>
         <PenAlt />
         <ruby>
           手<rt>て</rt>書<rt>が</rt>
         </ruby>
         き
-      </button>
+      </PrimaryButton>
     </div>
   </div>
 );
@@ -220,14 +223,14 @@ const TouchControl = ({
   handler: CanvasOperation | undefined;
 }) => (
   <div className={styles['touch-control']}>
-    <button onClick={() => handler?.clear()} disabled={!handler}>
+    <PrimaryButton onClick={() => handler?.clear()} disabled={!handler}>
       <EraserAll />
       ぜんぶけす
-    </button>
-    <button onClick={() => handler?.back()} disabled={!handler}>
+    </PrimaryButton>
+    <PrimaryButton onClick={() => handler?.back()} disabled={!handler}>
       <Eraser />
       ひとつけす
-    </button>
+    </PrimaryButton>
   </div>
 );
 
@@ -253,14 +256,14 @@ const SubmitControl = ({
             字<rt>じ</rt>
           </ruby>
         </div>
-        <button onClick={submit}>
+        <PrimaryButton onClick={submit}>
           <ruby>
             決<rt>けっ</rt>定<rt>てい</rt>
           </ruby>
-        </button>
+        </PrimaryButton>
       </>
     ) : (
-      <button onClick={submit}>けってい</button>
+      <PrimaryButton onClick={submit}>けってい</PrimaryButton>
     )}
   </div>
 );

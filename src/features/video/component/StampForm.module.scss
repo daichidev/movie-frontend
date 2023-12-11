@@ -35,13 +35,16 @@
     font-weight: 500;
     line-height: 25.5px;
     white-space: pre-wrap;
-    &:disabled {
+    &:disabled:not(.submitting) {
       background: #cccccc !important;
+      cursor: not-allowed;
+    }
+    .submitting {
       cursor: not-allowed;
     }
   }
 
-  &:nth-child(1) {
+  &.normal {
     button {
       background: linear-gradient(0deg, #f9a400 29.17%, #f5d942 100%);
       &:hover {
@@ -55,7 +58,7 @@
       fill: #f9a400;
     }
   }
-  &:nth-child(2) {
+  &.good {
     button {
       letter-spacing: 1px;
       background: linear-gradient(0deg, #47b934 39.58%, #9ddd5d 100%);
@@ -70,10 +73,14 @@
       fill: #47b934;
     }
   }
-  &:nth-child(3) {
+  &.best {
     button {
-      padding-left: 5px;
-      letter-spacing: -1px;
+      padding-left: 9px;
+      span {
+        display: inline-block;
+        letter-spacing: -0.05em;
+        margin: 0 -6px;
+      }
       background: linear-gradient(0deg, #05a0e2 43.79%, #4fd8eb 100%);
       &:hover {
         background: linear-gradient(0deg, #68c7ef 45.31%, #97e8f3 89.47%);

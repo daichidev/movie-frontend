@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { ReactComponent as StampNormal } from '../../../assets/svgs/stamp1.svg';
 import { ReactComponent as StampGood } from '../../../assets/svgs/stamp2.svg';
 import { ReactComponent as StampBest } from '../../../assets/svgs/stamp3.svg';
@@ -10,11 +10,11 @@ import styles from './StampForm.module.scss';
 export type StampFormProps = {
   className?: string;
   normalCount: number;
-  handleNormalClick: () => void;
+  handleNormalClick: () => Promise<void>;
   goodCount: number;
-  handleGoodClick: () => void;
+  handleGoodClick: () => Promise<void>;
   bestCount: number;
-  handleBestClick: () => void;
+  handleBestClick: () => Promise<void>;
   showStampBarChartModal: () => void;
 };
 export const StampForm = ({
@@ -29,18 +29,21 @@ export const StampForm = ({
 }: StampFormProps) => (
   <div className={clsx(className, styles.form)}>
     <Stamp
+      className={styles.normal}
       label={'もっと\nしりたい'}
       Icon={<StampNormal />}
       count={normalCount}
       onClick={handleNormalClick}
     />
     <Stamp
+      className={styles.good}
       label={'なるほど'}
       Icon={<StampGood />}
       count={goodCount}
       onClick={handleGoodClick}
     />
     <Stamp
+      className={styles.best}
       label={'みんなに\nつたえたい'}
       Icon={<StampBest />}
       count={bestCount}
@@ -56,10 +59,10 @@ export const StampForm = ({
 type StampProps = {
   label: string;
   Icon: ReactNode;
-  onClick?: () => void;
+  onClick: () => Promise<void>;
   count?: number;
   disabled?: boolean;
-  submitting?: boolean;
+  className?: string;
 };
 const Stamp = ({
   label,
@@ -67,16 +70,21 @@ const Stamp = ({
   count = 0,
   onClick,
   disabled,
-  submitting,
+  className,
 }: StampProps) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   return (
-    <div className={styles.stamp}>
+    <div className={clsx(className, styles.stamp)}>
       <button
-        className={clsx(submitting && styles.submitting)}
-        onClick={onClick}
-        disabled={disabled}
+        className={clsx(isSubmitting && styles.submitting)}
+        onClick={async () => {
+          setIsSubmitting(true);
+          await onClick();
+          setIsSubmitting(false);
+        }}
+        disabled={isSubmitting || disabled}
       >
-        {label}
+        <span>{label}</span>
         {Icon}
       </button>
       <div className={styles.stars}>

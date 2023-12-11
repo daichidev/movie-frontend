@@ -167,11 +167,8 @@
     height: 46px;
     flex-shrink: 0;
     border-radius: 16px;
-    border: 1px solid #fff;
-    background: linear-gradient(180deg, #b5b5c1 10.42%, #5a5a63 91.67%);
     box-shadow: 0px 0.7px 2.1px 0px rgba(0, 0, 0, 0.7);
     color: #fff;
-    text-align: center;
     font-size: 17px;
     font-weight: 505;
     line-height: 35px;
@@ -181,6 +178,12 @@
     }
     &.end {
       background: linear-gradient(180deg, #ffb2b2 10.42%, #ff1a1a 91.67%);
+      &:hover {
+        background: linear-gradient(180deg, #ffd8d8 10.42%, #fd8a8a 91.67%);
+      }
+    }
+    &.submiting {
+      background: linear-gradient(180deg, #ef7e7e 10.42%, #ce0303 91.67%);
     }
   }
 }

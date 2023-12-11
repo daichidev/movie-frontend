@@ -5,6 +5,10 @@ import { ReactComponent as Revert } from '../../../assets/svgs/back.svg';
 import { ReactComponent as DeleteIcon } from '../../../assets/svgs/close_alt.svg';
 import { ReactComponent as DeletePopupIcon } from '../../../assets/svgs/delete_popup.svg';
 import { ReactComponent as Star } from '../../../assets/svgs/star.svg';
+import {
+  PrimaryButton,
+  buttonStyles,
+} from '../../../components/Elements/Button';
 import styles from './StampBarChart.module.scss';
 
 const gradientNormal = 'gradient_normal';
@@ -190,14 +194,14 @@ const StampDeletePopup = ({
             />
           ),
       )}
-      <button
+      <PrimaryButton
         className={styles.submit}
         onClick={() => submit(time, deletingStamps)}
       >
         <ruby>
           決<rt>けっ</rt>定<rt>てい</rt>
         </ruby>
-      </button>
+      </PrimaryButton>
     </div>
   );
 };
@@ -223,6 +227,7 @@ const DeleteToggle = ({
         )}
       />
       <button
+        className={buttonStyles['secondary-icon']}
         onClick={() => {
           isDeleting
             ? setDeletingStamps(

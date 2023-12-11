@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ReactComponent as BackIcon } from '../../assets/svgs/back.svg';
 import { ReactComponent as HomeIcon } from '../../assets/svgs/home.svg';
 import { ReactComponent as LogoutIcon } from '../../assets/svgs/logout.svg';
+import { buttonStyles } from '../Elements/Button';
 import styles from './styles.module.scss';
 
 export const Navigation = ({
@@ -17,7 +18,10 @@ export const Navigation = ({
     <nav className={clsx(className, styles.nav)}>
       <div>
         {!noBack && (
-          <button onClick={() => navigate(-1)}>
+          <button
+            className={buttonStyles['secondary-icon']}
+            onClick={() => navigate(-1)}
+          >
             <BackIcon />
             もどる
           </button>
@@ -25,13 +29,13 @@ export const Navigation = ({
       </div>
       <div>
         {/* TODO リンク */}
-        <a href="/">
+        <a className={buttonStyles['secondary-icon']} href="/">
           <HomeIcon />
           {`トモプラ\nホーム`}
         </a>
         {/* TODO ログアウト処理 */}
-        <button>
-          <LogoutIcon />
+        <button className={buttonStyles['secondary-icon']}>
+          <LogoutIcon className={buttonStyles.secondary} />
           ログアウト
         </button>
       </div>
