@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
 import { Navigation } from '../../components/Navigation';
-import '../../styles/dashboard/index.scss';
 import { LevelButton } from './component/Button';
 import { ClassicButton } from './component/ClassicButton';
 import styles from './styles.module.scss';

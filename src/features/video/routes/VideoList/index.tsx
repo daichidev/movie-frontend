@@ -1,6 +1,6 @@
 import { default as JsxParser } from 'html-react-parser';
 import { ExtendedKanjiText } from '../../../../components/Elements/CustomText';
-import { Layout } from '../../../../components/Layout/Layout';
+import { Layout } from '../../../../components/Layout';
 import { convertRuby } from '../../../../config';
 import { VideoCard } from '../../component/VideoCard';
 import styles from './styles.module.scss';
@@ -23,20 +23,24 @@ export const VideoList = () => {
         </div>
         <hr />
         <ul className={styles.list}>
-          {!isLoading ? videoList.map((element) => {
-            return (
-              <li>
-                <VideoCard
-                  title={element.name}
-                  gradeId={gradeId}
-                  content={element.content}
-                  videoId={element.id}
-                  isClassic={element.isClassic}
-                  classicType={element.classicType}
-                />
-              </li>
-            );
-          }) : <span>ロード中...</span>}
+          {!isLoading ? (
+            videoList.map((element) => {
+              return (
+                <li>
+                  <VideoCard
+                    title={element.name}
+                    gradeId={gradeId}
+                    content={element.content}
+                    videoId={element.id}
+                    isClassic={element.isClassic}
+                    classicType={element.classicType}
+                  />
+                </li>
+              );
+            })
+          ) : (
+            <span>ロード中...</span>
+          )}
         </ul>
       </div>
     </Layout>

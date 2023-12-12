@@ -7,7 +7,6 @@ import {
   setVideoGoodCount,
   setVideoNormalCount,
 } from '../../../../stores/store';
-import '../../../../styles/video/detail/index.scss';
 import {
   useCreateStampMutation,
   useGetWordsQuery,
