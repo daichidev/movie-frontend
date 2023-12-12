@@ -18,4 +18,14 @@
     align-items: center;
     row-gap: 18px;
   }
+  button,
+  a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 10px;
+    svg {
+      border-radius: 50%;
+    }
+  }
 }

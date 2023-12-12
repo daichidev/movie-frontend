@@ -1,0 +1,84 @@
+.word-list {
+  display: flex;
+  flex-direction: column;
+  width: 452px;
+  height: 550px;
+  border-radius: 12px;
+  .instruction {
+    padding: 11px 14px 8px 13px;
+    background: #f7931e;
+    border-radius: 12px 12px 0 0;
+
+    color: #fff;
+    font-size: 25px;
+    font-weight: 600;
+    letter-spacing: 1.25px;
+    > div:first-child {
+      position: relative;
+      text-align: center;
+      ::before,
+      ::after {
+        content: '';
+        position: absolute;
+        top: 55%;
+        width: 40px;
+        height: 2px;
+        border-radius: 2px;
+        background: #fff;
+      }
+      ::before {
+        left: 0;
+      }
+      ::after {
+        right: 0;
+      }
+    }
+    > div:last-child {
+      margin-top: 10px;
+      margin-left: 16px;
+      display: flex;
+      align-items: center;
+      column-gap: 8px;
+      font-size: 20px;
+      line-height: 36px;
+    }
+  }
+  .list-container {
+    height: 406px;
+    padding: 20px 20px 15px 27px;
+
+    width: 100%;
+    border-radius: 0 0 16px 16px;
+    border: 3px solid #f7931e;
+    background: #fff;
+  }
+}
+.list {
+  padding: 6px;
+  margin: -6px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+  height: 100%;
+  overflow-y: auto;
+
+  button {
+    width: 389px;
+    height: 70px;
+    padding: 21px;
+    border: 2px solid #fff;
+    border-radius: 12px;
+    background: #cceaff;
+    filter: drop-shadow(0px 1.4px 4.2px rgba(0, 0, 0, 0.7));
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    color: #333;
+    font-size: 34px;
+    font-weight: 600;
+    line-height: 14px;
+    letter-spacing: 1.7px;
+    text-align: left;
+  }
+}

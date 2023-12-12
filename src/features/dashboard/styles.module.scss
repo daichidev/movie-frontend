@@ -57,13 +57,10 @@
     justify-content: center;
     align-items: flex-end;
     width: 450px;
-    height: 86px;
-    padding-bottom: 18px;
+    height: 88px;
+    padding-top: 14px;
+    padding-bottom: 16px;
     border-radius: 16px;
-    border: 1px solid #fff;
-    background: linear-gradient(180deg, #29abe2 5.21%, #0171bd 100%);
-    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.7);
-    color: #fff;
     letter-spacing: 2.8px;
   }
 }
@@ -72,6 +69,7 @@
   font-size: 66px;
   font-weight: 600;
   letter-spacing: 0.12em;
+  line-height: 0.88;
 }
 .grade + span {
   font-size: 28px;
@@ -110,5 +108,11 @@
     font-size: 30px;
     font-weight: 600;
     letter-spacing: 1.5px;
+    &:hover {
+      background: linear-gradient(180deg, #fff 0%, #f8f6f6 100%);
+    }
+    &:focus {
+      background: linear-gradient(180deg, #eaeaea 0%, #cbc9c9 100%);
+    }
   }
 }

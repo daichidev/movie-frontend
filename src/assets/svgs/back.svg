@@ -1,24 +1,6 @@
-<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g filter="url(#filter0_d_3507_4241)">
-<path d="M57 30C57 16.1929 45.8071 5 32 5C18.1929 5 7 16.1929 7 30C7 43.8071 18.1929 55 32 55C45.8071 55 57 43.8071 57 30Z" fill="url(#paint0_linear_3507_4241)"/>
-<path d="M57.5 30C57.5 15.9167 46.0833 4.5 32 4.5C17.9167 4.5 6.5 15.9167 6.5 30C6.5 44.0833 17.9167 55.5 32 55.5C46.0833 55.5 57.5 44.0833 57.5 30Z" stroke="white"/>
-</g>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M43.4033 23C43.4033 21.3431 42.0602 20 40.4033 20H25.4957C20.9037 20 16.7522 22.7327 14.9366 26.9504C13.8137 29.5587 13.6965 32.4909 14.6061 35.1802C16.1864 39.8523 20.5703 43 25.5041 43H37.9033C38.4556 43 38.9033 42.5526 38.9033 42.0003C38.9033 41.3351 38.9033 40.5277 38.9033 40C38.9033 38.9983 38.9033 38.4767 38.9033 37.9999C38.9033 37.4476 38.4585 37 37.9062 37C34.5925 37 25.5041 37 25.5041 37C23.1448 37 21.0463 35.4942 20.2898 33.2578C19.8548 31.9716 19.9111 30.5693 20.4476 29.3228C21.3157 27.3064 23.3004 26 25.4957 26H40.4033C42.0602 26 43.4033 24.6569 43.4033 23Z" fill="white"/>
-<path d="M47.0991 23L36.4033 31.491L36.4033 14.509L47.0991 23Z" fill="white" stroke="white"/>
-<defs>
-<filter id="filter0_d_3507_4241" x="0" y="0" width="64" height="64" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-<feOffset dy="2"/>
-<feGaussianBlur stdDeviation="3"/>
-<feComposite in2="hardAlpha" operator="out"/>
-<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.7 0"/>
-<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_3507_4241"/>
-<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_3507_4241" result="shape"/>
-</filter>
-<linearGradient id="paint0_linear_3507_4241" x1="32" y1="5" x2="32" y2="55" gradientUnits="userSpaceOnUse">
-<stop offset="0.1" stop-color="#B5B5C1"/>
-<stop offset="0.9" stop-color="#595963"/>
-</linearGradient>
-</defs>
+<svg width="52" height="52" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <path d="M57 30C57 16.193 45.807 5 32 5S7 16.193 7 30s11.193 25 25 25 25-11.193 25-25z" fill="url(#prefix__paint0_linear_3507_4241)" transform="translate(-6 -4)"/>
+  <path d="M51.5 26C51.5 11.917 40.083.5 26 .5S.5 11.917.5 26 11.917 51.5 26 51.5 51.5 40.083 51.5 26z" stroke="#fff"/>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M37.403 19a3 3 0 00-3-3H19.496a11.496 11.496 0 00-10.89 15.18A11.506 11.506 0 0019.504 39h12.4a1 1 0 001-1v-2-2c0-.552-.446-1-.998-1H19.504a5.506 5.506 0 01-5.056-7.677A5.496 5.496 0 0119.496 22h14.907a3 3 0 003-3z" fill="#fff"/>
+  <path d="M41.1 19l-10.697 8.491V10.509L41.1 19z" fill="#fff" stroke="#fff"/>
 </svg>

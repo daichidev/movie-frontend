@@ -7,6 +7,10 @@ import { ReactComponent as StampNormal } from '../../../assets/svgs/stamp1.svg';
 import { ReactComponent as StampGood } from '../../../assets/svgs/stamp2.svg';
 import { ReactComponent as StampBest } from '../../../assets/svgs/stamp3.svg';
 import { ReactComponent as Star } from '../../../assets/svgs/star.svg';
+import {
+  SecondaryButton,
+  buttonStyles,
+} from '../../../components/Elements/Button';
 import styles from './BarChartModal.module.scss';
 import { StampBarChart, StampBarChartProps } from './StampBarChart';
 
@@ -107,7 +111,7 @@ const Header = ({
         </select>
       </div>
     )}
-    <button onClick={onClose}>
+    <button className={buttonStyles['secondary-icon']} onClick={onClose}>
       <CloseAlt />
     </button>
   </div>
@@ -165,13 +169,16 @@ const Control = ({
           おわる
         </button>
       ) : (
-        <button className={styles.remove} onClick={() => setShowDelete(true)}>
+        <SecondaryButton
+          className={styles.remove}
+          onClick={() => setShowDelete(true)}
+        >
           <Star /> を
           <ruby>
             消<rt>け</rt>
           </ruby>
           す
-        </button>
+        </SecondaryButton>
       )}
     </div>
   );

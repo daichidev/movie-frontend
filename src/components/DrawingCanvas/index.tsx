@@ -86,7 +86,7 @@ const Canvas = (props: CanvasPropType) => {
   const getContext = (): CanvasRenderingContext2D => {
     // eslint-disable-next-line
     const canvas: any = canvasRef.current;
-    return canvas.getContext('2d');
+    return canvas?.getContext('2d');
   };
 
   const _getZoom = () => {
@@ -298,7 +298,7 @@ const Canvas = (props: CanvasPropType) => {
 
   const _reset = useCallback(() => {
     const ctx = getContext();
-    ctx.clearRect(0, 0, width, height);
+    ctx?.clearRect(0, 0, width, height);
     plotEvents.current = [];
     props.onEndDraw(plotEvents.current);
     // eslint-disable-next-line
