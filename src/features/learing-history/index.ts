@@ -1,5 +1,6 @@
 import { apiClientInstance } from '../../utils/auth/helpers/apiClient/instance';
 import { formatHistoricalDate } from '../../utils/date';
+import { LEARNING_HISTORY_API_KEY } from '../../utils/env';
 import { LearningAction, LearningHistoryDetails } from './types';
 export * from './types';
 
@@ -25,6 +26,9 @@ export const postLearningHistory = async <A extends LearningAction>(
     url: '/apps/api/learning-history/Prod/movie',
     method: 'post',
     data,
+    headers: {
+      Authorization: `Bearer ${LEARNING_HISTORY_API_KEY}`,
+    },
   });
   return res.data;
 };
