@@ -1,6 +1,9 @@
 import { apiClientInstance } from '../../utils/auth/helpers/apiClient/instance';
-import { formatHistoricalDate } from '../../utils/date';
-import { LEARNING_HISTORY_API_KEY } from '../../utils/env';
+import { formatToHistoricalDate } from '../../utils/date';
+import {
+  LEARNING_HISTORY_API_KEY,
+  LEARNING_HISTORY_API_URL,
+} from '../../utils/env';
 import { LearningAction, LearningHistoryDetails } from './types';
 export * from './types';
 
@@ -18,11 +21,12 @@ export const postLearningHistory = async <A extends LearningAction>(
 ) => {
   const data: LearningHistoryPostRequest = {
     user_uuid,
-    historical_date: formatHistoricalDate(new Date()),
+    historical_date: formatToHistoricalDate(new Date()),
     action,
     detail,
   };
   const res = await apiClientInstance({
+    baseURL: LEARNING_HISTORY_API_URL,
     url: '/apps/api/learning-history/Prod/movie',
     method: 'post',
     data,

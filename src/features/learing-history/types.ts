@@ -1,26 +1,106 @@
 // TODO 仕様確定次第反映
-export type LearningAction = 'login';
-// | 'grade_select'
-// | 'movie_select'
-// | 'movie_play'
-// | 'movie_pause'
-// | 'stamp_click'
-// | 'stamp_check_mine'
-// | 'stamp_check_class_all'
-// | 'stamp_check_class'
-// | 'stamp_remove'
-// | 'toibox_write'
-// | 'toibox_record'
-// | 'toibox_change_question'
-// | 'toibox_reset';
+export type LearningAction =
+  | 'genre_select'
+  | 'movie_select'
+  | 'movie_play'
+  | 'movie_pause'
+  | 'movie_resume'
+  | 'movie_end'
+  | 'stamp_put'
+  | 'stamp_delete'
+  | 'stamp_view'
+  | 'toibox_question_edit'
+  | 'toibox_question_reset'
+  | 'toibox_answer_write'
+  | 'toibox_answer_clear'
+  | 'toibox_answer_save';
 
 export type LearningHistoryDetails = {
-  login: {
+  genre_select: {
     user_type: UserType;
-    transition_source: TransitionSource;
-    user_agent: string;
-    // note 仕様書:         "user_agent": "IPアドレス"
-    ip_address: string;
+    genre: string;
+  };
+  movie_select: {
+    user_type: UserType;
+    genre: string;
+    movie_id: string;
+  };
+  movie_play: {
+    user_type: UserType;
+    genre: string;
+    movie_id: string;
+  };
+  movie_pause: {
+    user_type: UserType;
+    genre: string;
+    movie_id: string;
+    pause_at: number;
+  };
+  movie_resume: {
+    user_type: UserType;
+    genre: string;
+    movie_id: string;
+    resume_at: number;
+  };
+  movie_end: {
+    user_type: UserType;
+    genre: string;
+    movie_id: string;
+  };
+  stamp_put: {
+    user_type: UserType;
+    genre: string;
+    movie_id: string;
+    stamp_type: number;
+    stamp_at: number;
+  };
+  stamp_view: {
+    user_type: UserType;
+    genre: string;
+    movie_id: string;
+  };
+  stamp_delete: {
+    user_type: UserType;
+    genre: string;
+    movie_id: string;
+    stamp_type: number;
+    stamp_at: number;
+  };
+  toibox_question_edit: {
+    user_type: UserType;
+    genre: string;
+    movie_id: string;
+    question: string;
+  };
+  toibox_question_reset: {
+    user_type: UserType;
+    genre: string;
+    movie_id: string;
+  };
+  toibox_answer_write: {
+    user_type: UserType;
+    genre: string;
+    movie_id: string;
+    input_type: InputType;
+    question: string;
+    answer: string;
+    stroke: any[];
+  };
+  toibox_answer_clear: {
+    user_type: UserType;
+    genre: string;
+    movie_id: string;
+    input_type: 'touch';
+    question: string;
+  };
+  toibox_answer_save: {
+    user_type: UserType;
+    genre: string;
+    movie_id: string;
+    input_type: InputType;
+    question: string;
+    answer: string;
+    stroke: any[];
   };
 };
 
@@ -32,3 +112,9 @@ export type UserType =
 export type TransitionSource = any;
 
 export type InputType = 'touch' | 'keyboard' | 'software-keyboard';
+
+export const STAMPS = {
+  normal: 1,
+  good: 2,
+  best: 3,
+};
