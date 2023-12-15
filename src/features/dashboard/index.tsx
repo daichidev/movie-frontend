@@ -1,11 +1,19 @@
 import clsx from 'clsx';
-import { Link } from 'react-router-dom';
+import Cookies from "js-cookie";
+import { Link, useLocation } from 'react-router-dom';
 import { Navigation } from '../../components/Navigation';
 import { LevelButton } from './component/Button';
 import { ClassicButton } from './component/ClassicButton';
 import styles from './styles.module.scss';
 
 export const Home = () => {
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const parameterValue = queryParams.get('X-CSRF-TOKEN');
+    const hours = 1;
+    const now = new Date();
+    const expires = new Date(now.getTime() + hours * 60 * 60 * 1000);
+    Cookies.set('X-CSRF-TOKEN', parameterValue ?? "", {expires: expires});
   return (
     <main className={styles.main}>
       <div className={styles.header}>

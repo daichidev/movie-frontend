@@ -50,7 +50,7 @@ export const useVideoList = () => {
     videoList: dummyData,
     genre: level,
     // TODO　学年以外の場合のID値は？
-    gradeId: level,
+    gradeId: c_level,
     isLoading: c_loading ? c_loading : isLoading,
   };
 };
