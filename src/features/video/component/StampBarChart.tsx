@@ -9,6 +9,7 @@ import {
   PrimaryButton,
   buttonStyles,
 } from '../../../components/Elements/Button';
+import { formatDuration } from '../../../utils/duration';
 import styles from './StampBarChart.module.scss';
 
 const gradientNormal = 'gradient_normal';
@@ -19,29 +20,30 @@ const cellSizeAdjusted = cellSizeBase - 0.385;
 const unitSec = 10;
 const starOffset = 82;
 const dataPoints = (total: number, unit: number) =>
-  Array.from({ length: Math.ceil(total / unit) }).map((_, i) => i);
+  Array.from({ length: Math.ceil(total / unit) + 1 }).map((_, i) => i);
 
+const MOCK_VIDEO_TOTAL_SEC = 1800;
 export const MOCK_STAMP_CHART_DATA: StampBarChartProps['data'] = dataPoints(
-  1800, // video totalSec
+  MOCK_VIDEO_TOTAL_SEC,
   unitSec,
 ).map((i) => {
   return {
-    timeSec: i * unitSec,
+    timeSec: Math.min(i * unitSec, MOCK_VIDEO_TOTAL_SEC),
     normal: Math.floor(Math.random() * 26),
     good: Math.floor(Math.random() * 26),
     best: Math.floor(Math.random() * 26),
   };
 });
 export const MOCK_MY_STAMPS: StampBarChartProps['myStamps'] = [
-  { type: 'normal', at: 50 },
-  { type: 'good', at: 50 },
-  { type: 'best', at: 50 },
+  { type: 'normal', at: 1 },
+  { type: 'good', at: 52 },
+  { type: 'best', at: 55 },
   { type: 'normal', at: 10 },
   { type: 'normal', at: 420 },
   { type: 'good', at: 100 },
-  { type: 'good', at: 1790 },
+  { type: 'good', at: 1791 },
   { type: 'best', at: 10 },
-  { type: 'best', at: 1790 },
+  { type: 'best', at: 1802 },
 ] as const;
 
 const STAMP_TYPES = ['normal', 'good', 'best'] as const;
