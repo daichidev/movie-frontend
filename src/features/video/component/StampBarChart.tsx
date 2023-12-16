@@ -66,9 +66,9 @@ export const StampBarChart = ({
 
   const myStampsGrouped = myStamps.reduce<Record<number, Stamp[]>>(
     (acc, cur) => {
-      // TODO summarize
-      if (!acc[cur.at]) acc[cur.at] = [];
-      acc[cur.at].push(cur);
+      const tick = Math.floor(cur.at / unitSec) * unitSec;
+      if (!acc[tick]) acc[tick] = [];
+      acc[tick].push(cur);
       return acc;
     },
     {},
@@ -124,7 +124,12 @@ export const StampBarChart = ({
             ];
           }}
         />
-        <XAxis dataKey="timeSec" tickLine={false} axisLine={false} />
+        <XAxis
+          dataKey="timeSec"
+          tickLine={false}
+          axisLine={false}
+          tickFormatter={formatDuration}
+        />
         <YAxis tickLine={false} axisLine={false} />
         <Bar dataKey="normal" fill={`url(#${gradientNormal})`} barSize={10} />
         <Bar dataKey="good" fill={`url(#${gradientGood})`} barSize={10} />
