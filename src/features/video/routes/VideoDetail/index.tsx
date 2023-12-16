@@ -3,7 +3,9 @@ import { useState } from 'react';
 import { CustomPlayer } from '../../../../components/CustomPlayer';
 import { PlotEventType } from '../../../../components/DrawingCanvas';
 import { Layout } from '../../../../components/Layout';
+import { useLearningHistory } from '../../../../hooks/learning-history';
 import { useAuthContext } from '../../../../utils/auth/middleware/auth/AuthContext';
+import { STAMPS } from '../../../learing-history';
 import { BarChartModal } from '../../component/BarChartModal';
 import {
   QuestionBoard,
@@ -28,7 +30,11 @@ export const VideoDetail = () => {
   const auth = useAuthContext();
   const isTeacher = auth.isTeacher?.() || false;
 
+  const { post: postLearningHistory } = useLearningHistory();
+
   const {
+    videoId,
+    genre,
     videoRef,
     videoURL,
 
@@ -105,7 +111,17 @@ export const VideoDetail = () => {
   const stampChartData = MOCK_STAMP_CHART_DATA;
   const myStamps = MOCK_MY_STAMPS;
   const submitDeleteStamps = async (stamps: Stamp[]) => {
+    // TODO delete stamps
 
+    stamps.forEach(({ type, at }) => {
+      postLearningHistory('stamp_delete', {
+        movie_id: videoId!,
+        genre: `${genre}`,
+        stamp_type: STAMPS[type],
+        stamp_at: at,
+      });
+    });
+  };
   return (
     <>
       <Layout className={styles.main}>
@@ -131,7 +147,13 @@ export const VideoDetail = () => {
                   handleGoodClick={handleGoodClick as () => Promise<void>}
                   bestCount={bestCount}
                   handleBestClick={handleBestClick as () => Promise<void>}
-                  showStampBarChartModal={() => setShowStampBarChartModal(true)}
+                  showStampBarChartModal={() => {
+                    postLearningHistory('stamp_view', {
+                      movie_id: videoId!,
+                      genre: `${genre}`,
+                    });
+                    setShowStampBarChartModal(true);
+                  }}
                 />
               </div>
             </div>
