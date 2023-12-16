@@ -33,24 +33,25 @@ export const MOCK_STAMP_CHART_DATA: StampBarChartProps['data'] = dataPoints(
   };
 });
 export const MOCK_MY_STAMPS: StampBarChartProps['myStamps'] = [
-  { stamp: 'normal', time: 50 },
-  { stamp: 'good', time: 50 },
-  { stamp: 'best', time: 50 },
-  { stamp: 'normal', time: 10 },
-  { stamp: 'normal', time: 420 },
-  { stamp: 'good', time: 100 },
-  { stamp: 'good', time: 1790 },
-  { stamp: 'best', time: 10 },
-  { stamp: 'best', time: 1790 },
+  { type: 'normal', at: 50 },
+  { type: 'good', at: 50 },
+  { type: 'best', at: 50 },
+  { type: 'normal', at: 10 },
+  { type: 'normal', at: 420 },
+  { type: 'good', at: 100 },
+  { type: 'good', at: 1790 },
+  { type: 'best', at: 10 },
+  { type: 'best', at: 1790 },
 ] as const;
 
 const STAMP_TYPES = ['normal', 'good', 'best'] as const;
 export type StampType = (typeof STAMP_TYPES)[number];
+export type Stamp = { type: StampType; at: number };
 export type StampBarChartProps = {
   data: { timeSec: number; normal: number; good: number; best: number }[];
-  myStamps: { stamp: StampType; time: number }[];
+  myStamps: Stamp[];
   showDelete: boolean;
-  submitDeleteStamp: (time: number, stamps: StampType[]) => Promise<void>;
+  submitDeleteStamp: (stamps: Stamp[]) => Promise<void>;
 };
 export const StampBarChart = ({
   data,
@@ -60,13 +61,14 @@ export const StampBarChart = ({
 }: StampBarChartProps) => {
   const [selectedStamps, setSelectedStamps] = useState<{
     time: number;
-    stamps: StampType[];
+    stamps: Stamp[];
   }>();
 
-  const myStampsGrouped = myStamps.reduce<Record<number, StampType[]>>(
+  const myStampsGrouped = myStamps.reduce<Record<number, Stamp[]>>(
     (acc, cur) => {
-      if (!acc[cur.time]) acc[cur.time] = [];
-      acc[cur.time].push(cur.stamp);
+      // TODO summarize
+      if (!acc[cur.at]) acc[cur.at] = [];
+      acc[cur.at].push(cur);
       return acc;
     },
     {},
@@ -141,15 +143,16 @@ export const StampBarChart = ({
               }}
             >
               <div className={styles.container}>
-                {STAMP_TYPES.map(
-                  (stampType) =>
-                    stamps.includes(stampType) && (
-                      <Star
-                        key={stampType}
-                        className={clsx(styles.stamp, styles[stampType])}
-                      />
-                    ),
-                )}
+                {STAMP_TYPES.map((stampType) => {
+                  const stamp = stamps.find(({ type }) => type === stampType);
+                  if (!stamp) return null;
+                  return (
+                    <Star
+                      key={stampType}
+                      className={clsx(styles.stamp, styles[stampType])}
+                    />
+                  );
+                })}
                 {showDelete && (
                   <button
                     className={styles.delete}
@@ -160,7 +163,7 @@ export const StampBarChart = ({
                 )}
                 {selectedStamps?.time === +key && (
                   <StampDeletePopup
-                    {...selectedStamps}
+                    stamps={selectedStamps.stamps}
                     submit={submitDeleteStamp}
                   />
                 )}
@@ -173,30 +176,31 @@ export const StampBarChart = ({
 };
 
 const StampDeletePopup = ({
-  time,
   stamps,
   submit,
 }: {
-  time: number;
-  stamps: StampType[];
-  submit: (time: number, stamps: StampType[]) => Promise<void>;
+  stamps: Stamp[];
+  submit: (stamps: Stamp[]) => Promise<void>;
 }) => {
   const [deletingStamps, setDeletingStamps] = useState<StampType[]>([]);
   return (
     <div className={styles['delete-popup']}>
-      {STAMP_TYPES.map(
-        (stampType) =>
-          stamps.includes(stampType) && (
-            <DeleteToggle
-              stampType={stampType}
-              deletingStamps={deletingStamps}
-              setDeletingStamps={setDeletingStamps}
-            />
-          ),
-      )}
+      {STAMP_TYPES.map((stampType) => {
+        const stamp = stamps.find(({ type }) => type === stampType);
+        if (!stamp) return null;
+        return (
+          <DeleteToggle
+            stamp={stamp}
+            deletingStamps={deletingStamps}
+            setDeletingStamps={setDeletingStamps}
+          />
+        );
+      })}
       <PrimaryButton
         className={styles.submit}
-        onClick={() => submit(time, deletingStamps)}
+        onClick={() =>
+          submit(stamps.filter(({ type }) => deletingStamps.includes(type)))
+        }
       >
         <ruby>
           決<rt>けっ</rt>定<rt>てい</rt>
@@ -207,22 +211,22 @@ const StampDeletePopup = ({
 };
 
 const DeleteToggle = ({
-  stampType,
+  stamp,
   deletingStamps,
   setDeletingStamps,
 }: {
-  stampType: StampType;
+  stamp: Stamp;
   deletingStamps: StampType[];
   setDeletingStamps: (stamps: StampType[]) => void;
 }) => {
-  const isDeleting = deletingStamps.includes(stampType);
+  const isDeleting = deletingStamps.includes(stamp.type);
 
   return (
     <div className={styles['toggle-container']}>
       <Star
         className={clsx(
           styles.stamp,
-          styles[stampType],
+          styles[stamp.type],
           isDeleting && styles.deleting,
         )}
       />
@@ -230,10 +234,8 @@ const DeleteToggle = ({
         className={buttonStyles['secondary-icon']}
         onClick={() => {
           isDeleting
-            ? setDeletingStamps(
-                deletingStamps.filter((stamp) => stamp !== stampType),
-              )
-            : setDeletingStamps([...deletingStamps, stampType]);
+            ? setDeletingStamps(deletingStamps.filter((e) => e !== stamp.type))
+            : setDeletingStamps([...deletingStamps, stamp.type]);
         }}
       >
         {isDeleting ? <Revert /> : <DeleteIcon />}

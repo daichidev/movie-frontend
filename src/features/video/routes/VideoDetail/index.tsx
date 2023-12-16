@@ -16,7 +16,7 @@ import {
 import {
   MOCK_MY_STAMPS,
   MOCK_STAMP_CHART_DATA,
-  StampType,
+  Stamp,
 } from '../../component/StampBarChart';
 import { StampForm } from '../../component/StampForm';
 import { WordList } from '../../component/WordList';
@@ -104,7 +104,7 @@ export const VideoDetail = () => {
   const [classIndex, setClassIndex] = useState(0);
   const stampChartData = MOCK_STAMP_CHART_DATA;
   const myStamps = MOCK_MY_STAMPS;
-  const submitDeleteStamps = async (time: number, stamps: StampType[]) => {};
+  const submitDeleteStamps = async (stamps: Stamp[]) => {
 
   return (
     <>
