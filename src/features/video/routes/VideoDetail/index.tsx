@@ -71,7 +71,10 @@ export const VideoDetail = () => {
     mode: 'keyboard' | 'touch';
     text: string;
     drawing: PlotEventType[];
-  }) => {};
+  }) => {
+    // TODO 文字認識処理
+    // setAnswerText('文字認識結果');
+  };
 
   // TODO 「問い」更新周りのサーバー連携
   const saveQuestion = async (data: {

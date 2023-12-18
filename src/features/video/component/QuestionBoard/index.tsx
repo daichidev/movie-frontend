@@ -73,18 +73,23 @@ export const QuestionBoard = ({
           />
           <div className={clsx(styles.form, inputMode && styles.inputting)}>
             {inputMode === 'touch' || answerDrawing?.length ? (
-              <Canvas
-                onEndDraw={setAnswerDrawing}
-                width={1440}
-                height={408}
-                top={0}
-                left={0}
-                phase={0}
-                functionListener={(handler) =>
-                  (canvasHandler.current = handler)
-                }
-                plotEvents={answerDrawing || []}
-              />
+              <>
+                <Canvas
+                  onEndDraw={setAnswerDrawing}
+                  width={1440}
+                  height={408}
+                  top={0}
+                  left={0}
+                  phase={0}
+                  functionListener={(handler) =>
+                    (canvasHandler.current = handler)
+                  }
+                  plotEvents={answerDrawing || []}
+                />
+                <div className={styles['ocr-view']}>
+                  <div>{answerText}</div>
+                </div>
+              </>
             ) : (
               <textarea
                 placeholder="「問いボックスにかいとうする」のボタンをおして、書いてみよう。"
