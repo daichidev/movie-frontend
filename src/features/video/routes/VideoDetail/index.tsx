@@ -5,6 +5,7 @@ import { PlotEventType } from '../../../../components/DrawingCanvas';
 import { Layout } from '../../../../components/Layout';
 import { useLearningHistory } from '../../../../hooks/learning-history';
 import { useAuthContext } from '../../../../utils/auth/middleware/auth/AuthContext';
+import { useGetUserQuery } from '../../../api/api-slice';
 import { STAMPS } from '../../../learing-history';
 import { BarChartModal } from '../../component/BarChartModal';
 import {
@@ -21,7 +22,6 @@ import {
   Stamp,
 } from '../../component/StampBarChart';
 import { StampForm } from '../../component/StampForm';
-import { WordList } from '../../component/WordList';
 import { WordModal } from '../../component/WordModal';
 import styles from './styles.module.scss';
 import { useVideoDetail } from './useVideoDetail';
@@ -29,6 +29,8 @@ import { useVideoDetail } from './useVideoDetail';
 export const VideoDetail = () => {
   const auth = useAuthContext();
   const isTeacher = auth.isTeacher?.() || false;
+  const { data, isError } = useGetUserQuery(0);
+  console.log('userData', data, 'error: ', isError);
 
   const { post: postLearningHistory } = useLearningHistory();
 
@@ -131,13 +133,17 @@ export const VideoDetail = () => {
               <p>どうがを みて、かんじた きもちの ボタンを おしましょう。</p>
               <div className={styles.row}>
                 <div className={styles.player}>
-                  <CustomPlayer
-                    ref={videoRef}
-                    url={videoURL}
-                    id="MainPlay"
-                    width="100%"
-                    height="100%"
-                  />
+                  {data && data['user_uuid'] === undefined ? (
+                    <CustomPlayer
+                      ref={videoRef}
+                      url={videoURL}
+                      id="MainPlay"
+                      width="100%"
+                      height="100%"
+                    />
+                  ) : (
+                    '動画を視聴する権限がありません。'
+                  )}
                 </div>
                 <StampForm
                   className={styles['stamp-form']}
@@ -157,11 +163,17 @@ export const VideoDetail = () => {
                 />
               </div>
             </div>
-            <WordList
-              className={styles['word-list']}
-              wordData={wordsData}
-              openWordModal={openWordModal}
-            />
+            {data && data['user_uuid'] === undefined ? (
+              <CustomPlayer
+                ref={videoRef}
+                url={videoURL}
+                id="MainPlay"
+                width="100%"
+                height="100%"
+              />
+            ) : (
+              ''
+            )}
           </div>
           <QuestionBoard
             videoId={videoId!}

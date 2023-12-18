@@ -1,11 +1,6 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
-import { videoApi } from "../features/api/api-slice";
-import { categoryApi } from "../features/api/api-slice";
-import { gradeApi } from "../features/api/api-slice";
-import { unitApi } from "../features/api/api-slice";
-import { wordApi } from "../features/api/api-slice";
-import { stampApi } from "../features/api/api-slice";
+import { categoryApi, gradeApi, stampApi, unitApi, userApi, videoApi, wordApi } from "../features/api/api-slice";
 
 const videoSlice = createSlice({
   name: "videos",
@@ -53,6 +48,7 @@ export const store = configureStore({
     [unitApi.reducerPath]: unitApi.reducer,
     [wordApi.reducerPath]: wordApi.reducer,
     [stampApi.reducerPath]: stampApi.reducer,
+    [userApi.reducerPath]: userApi.reducer,
     videos: videoSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -68,7 +64,8 @@ export const store = configureStore({
       .concat(unitApi.middleware)
       .concat(gradeApi.middleware)
       .concat(wordApi.middleware)
-      .concat(stampApi.middleware),
+      .concat(stampApi.middleware)
+      .concat(userApi.middleware),
 });
 
 export const {

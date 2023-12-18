@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { getAuthCookies, getCsrfToken } from "../../config";
 
 export const baseURL = "http://video-streaming-api.mastercode.jp:8000/";
 // const baseURL = "http://127.0.0.1:8000/";
@@ -117,6 +118,41 @@ export const stampApi = createApi({
   })
 })
 
+export const tomoplaApi = createApi({
+  reducerPath: 'tomoplaApi',
+  baseQuery: fetchBaseQuery({
+    baseUrl: baseURL
+  }),
+  tagTypes: ["Tomoplas"],
+  endpoints: (builder) => ({
+    
+  })
+})
+
+export const userApi = createApi({
+  reducerPath: 'userApi',
+  baseQuery: fetchBaseQuery({
+    baseUrl: "https://mastercode.jp/api/Prod/",
+    prepareHeaders: (headers) => {
+      const cookies = getAuthCookies();
+      const csrfToken = getCsrfToken();
+      if (csrfToken === undefined || csrfToken === "") return;
+      if (cookies) {
+        headers.set('Cookie', `csrf_access_token=${cookies.csrf_access_token}; access_token_cookie=${cookies.access_token_cookie}`);
+        headers.set('X-CSRF-Token', csrfToken);
+      }
+      return headers;
+    },
+    credentials: 'include',
+  }),
+  tagTypes: ['users'],
+  endpoints: (builder) => ({
+    getUser: builder.query({
+      query: (id) => `/users/me/?referrer_application=${0}`
+    }),
+  })
+})
+
 export const {
   useGetVideosQuery,
   useUpdateVideosMutation,
@@ -127,3 +163,4 @@ export const { useGetGradesQuery } = gradeApi;
 export const { useGetUnitsQuery, useUpdateUnitsMutation } = unitApi;
 export const { useGetWordsQuery } = wordApi;
 export const { useGetStampsQuery, useCreateStampMutation } = stampApi;
+export const { useGetUserQuery } = userApi;

@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+
 export const dummyVideoData = [
   {
     id: 1,
@@ -188,3 +190,18 @@ export const get2byteLength = (str) => {
 
   return count;
 };
+
+export const getAuthCookies = () => {
+  let csrf_access_token = Cookies.get('csrf_access_token');
+  let access_token_cookie = Cookies.get('access_token_cookie');
+
+  return {
+    'csrf_access_token': csrf_access_token,
+    'access_token_cookie': access_token_cookie
+  };
+}
+
+export const getCsrfToken = () => {
+  let csrf_token_header = Cookies.get('X-CSRF-TOKEN');
+  return csrf_token_header;
+}
