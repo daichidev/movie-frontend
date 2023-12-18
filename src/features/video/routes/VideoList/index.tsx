@@ -29,6 +29,7 @@ export const VideoList = () => {
                 <li>
                   <VideoCard
                     title={element.name}
+                    genre={element.isClassic ? element.classicType : gradeId}
                     gradeId={gradeId}
                     content={element.content}
                     videoId={element.id}

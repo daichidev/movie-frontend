@@ -3,8 +3,10 @@ import { useState } from 'react';
 import { CustomPlayer } from '../../../../components/CustomPlayer';
 import { PlotEventType } from '../../../../components/DrawingCanvas';
 import { Layout } from '../../../../components/Layout';
+import { useLearningHistory } from '../../../../hooks/learning-history';
 import { useAuthContext } from '../../../../utils/auth/middleware/auth/AuthContext';
 import { useGetUserQuery } from '../../../api/api-slice';
+import { STAMPS } from '../../../learing-history';
 import { BarChartModal } from '../../component/BarChartModal';
 import {
   QuestionBoard,
@@ -17,7 +19,7 @@ import {
 import {
   MOCK_MY_STAMPS,
   MOCK_STAMP_CHART_DATA,
-  StampType,
+  Stamp,
 } from '../../component/StampBarChart';
 import { StampForm } from '../../component/StampForm';
 import { WordModal } from '../../component/WordModal';
@@ -28,9 +30,13 @@ export const VideoDetail = () => {
   const auth = useAuthContext();
   const isTeacher = auth.isTeacher?.() || false;
   const { data, isError } = useGetUserQuery(0);
-  console.log("userData", data, "error: ", isError);
+  console.log('userData', data, 'error: ', isError);
+
+  const { post: postLearningHistory } = useLearningHistory();
 
   const {
+    videoId,
+    genre,
     videoRef,
     videoURL,
 
@@ -106,8 +112,18 @@ export const VideoDetail = () => {
   const [classIndex, setClassIndex] = useState(0);
   const stampChartData = MOCK_STAMP_CHART_DATA;
   const myStamps = MOCK_MY_STAMPS;
-  const submitDeleteStamps = async (time: number, stamps: StampType[]) => {};
+  const submitDeleteStamps = async (stamps: Stamp[]) => {
+    // TODO delete stamps
 
+    stamps.forEach(({ type, at }) => {
+      postLearningHistory('stamp_delete', {
+        movie_id: videoId!,
+        genre: `${genre}`,
+        stamp_type: STAMPS[type],
+        stamp_at: at,
+      });
+    });
+  };
   return (
     <>
       <Layout className={styles.main}>
@@ -117,16 +133,17 @@ export const VideoDetail = () => {
               <p>どうがを みて、かんじた きもちの ボタンを おしましょう。</p>
               <div className={styles.row}>
                 <div className={styles.player}>
-                  {
-                    (data && data["user_uuid"] === undefined)?
+                  {data && data['user_uuid'] === undefined ? (
                     <CustomPlayer
-                    ref={videoRef}
-                    url={videoURL}
-                    id="MainPlay"
-                    width="100%"
-                    height="100%"
-                  /> : "動画を視聴する権限がありません。"
-                  }
+                      ref={videoRef}
+                      url={videoURL}
+                      id="MainPlay"
+                      width="100%"
+                      height="100%"
+                    />
+                  ) : (
+                    '動画を視聴する権限がありません。'
+                  )}
                 </div>
                 <StampForm
                   className={styles['stamp-form']}
@@ -136,22 +153,31 @@ export const VideoDetail = () => {
                   handleGoodClick={handleGoodClick as () => Promise<void>}
                   bestCount={bestCount}
                   handleBestClick={handleBestClick as () => Promise<void>}
-                  showStampBarChartModal={() => setShowStampBarChartModal(true)}
+                  showStampBarChartModal={() => {
+                    postLearningHistory('stamp_view', {
+                      movie_id: videoId!,
+                      genre: `${genre}`,
+                    });
+                    setShowStampBarChartModal(true);
+                  }}
                 />
               </div>
             </div>
-            {
-              (data && data["user_uuid"] === undefined)?
-                <CustomPlayer
+            {data && data['user_uuid'] === undefined ? (
+              <CustomPlayer
                 ref={videoRef}
                 url={videoURL}
                 id="MainPlay"
                 width="100%"
                 height="100%"
-              /> : ""
-            }
+              />
+            ) : (
+              ''
+            )}
           </div>
           <QuestionBoard
+            videoId={videoId!}
+            genre={genre!}
             question={question}
             inputMode={inputMode}
             setInputMode={setInputMode}
@@ -179,6 +205,8 @@ export const VideoDetail = () => {
       </Layout>
       <WordModal wordHtml={word} onClose={closeWordModal} />
       <QuestionEditorModal
+        videoId={videoId!}
+        genre={genre!}
         isOpen={showQuestionModal}
         onClose={closeQuestionModal}
         submit={saveQuestion}

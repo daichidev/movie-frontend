@@ -13,11 +13,14 @@ import Canvas, {
   PlotEventType,
 } from '../../../../components/DrawingCanvas';
 import { PrimaryButton } from '../../../../components/Elements/Button';
+import { useLearningHistory } from '../../../../hooks/learning-history';
 import styles from './styles.module.scss';
 
 const ANSWER_MAX_LENGTH = 150;
 export type InputMode = 'keyboard' | 'touch';
 export type QuestionBoardProps = {
+  videoId: string;
+  genre: string | number;
   question: string;
   inputMode: InputMode | undefined;
   setInputMode: (mode: InputMode | undefined) => void;
@@ -34,6 +37,8 @@ export type QuestionBoardProps = {
   editQuestion: () => void;
 };
 export const QuestionBoard = ({
+  videoId,
+  genre,
   question,
   inputMode,
   setInputMode,
@@ -45,14 +50,31 @@ export const QuestionBoard = ({
   isTeacher,
   editQuestion,
 }: QuestionBoardProps) => {
+  const { post: postLearningHistory } = useLearningHistory();
   const canvasHandler = useRef<CanvasOperation | undefined>();
 
+  const startWriting = () => {
+    postLearningHistory('toibox_answer_write', {
+      movie_id: videoId,
+      genre: `${genre}`,
+      question,
+    });
+    setInputMode(answerDrawing ? 'touch' : 'keyboard');
+  };
   const submit = async () => {
     if (!inputMode) return;
     await submitAnswer({
       mode: inputMode,
       text: answerText,
       drawing: answerDrawing,
+    });
+    postLearningHistory('toibox_answer_save', {
+      movie_id: videoId,
+      genre: `${genre}`,
+      question,
+      input_type: inputMode,
+      answer: answerText,
+      stroke: answerDrawing,
     });
     setInputMode(undefined);
   };
@@ -96,20 +118,12 @@ export const QuestionBoard = ({
             )}
             {!inputMode &&
               (answerText || answerDrawing?.length ? (
-                <button
-                  className={styles.rewrite}
-                  onClick={() =>
-                    setInputMode(answerDrawing ? 'touch' : 'keyboard')
-                  }
-                >
+                <button className={styles.rewrite} onClick={startWriting}>
                   <PenWhite />
                   かきなおす
                 </button>
               ) : (
-                <button
-                  className={styles.large}
-                  onClick={() => setInputMode('keyboard')}
-                >
+                <button className={styles.large} onClick={startWriting}>
                   <Pen />
                   <ruby>
                     問<rt>と</rt>
@@ -130,7 +144,18 @@ export const QuestionBoard = ({
           <InputControl inputMode={inputMode} setInputMode={setInputMode} />
         )}
         {inputMode === 'touch' && (
-          <TouchControl handler={canvasHandler.current} />
+          <TouchControl
+            clear={() => {
+              postLearningHistory('toibox_answer_clear', {
+                movie_id: videoId,
+                genre: `${genre}`,
+                question,
+                input_type: 'touch',
+              });
+              canvasHandler.current?.clear();
+            }}
+            undo={canvasHandler.current?.back}
+          />
         )}
       </div>
       {inputMode && (
@@ -218,16 +243,18 @@ const InputControl = ({
 );
 
 const TouchControl = ({
-  handler,
+  undo,
+  clear,
 }: {
-  handler: CanvasOperation | undefined;
+  undo?: VoidFunction;
+  clear?: VoidFunction;
 }) => (
   <div className={styles['touch-control']}>
-    <PrimaryButton onClick={() => handler?.clear()} disabled={!handler}>
+    <PrimaryButton onClick={() => clear?.()} disabled={!clear}>
       <EraserAll />
       ぜんぶけす
     </PrimaryButton>
-    <PrimaryButton onClick={() => handler?.back()} disabled={!handler}>
+    <PrimaryButton onClick={() => undo?.()} disabled={!undo}>
       <Eraser />
       ひとつけす
     </PrimaryButton>

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { KanjiText } from '../../../../components/Elements/CustomText';
+import { useLearningHistory } from '../../../../hooks/learning-history';
 import {
   setVideoBestCount,
   setVideoGoodCount,
@@ -14,6 +15,7 @@ import {
 
 export const useVideoDetail = () => {
   const dispatch = useDispatch();
+  const { post: postLearningHistory } = useLearningHistory();
 
   const { videoId, gradeId } = useParams();
   const [showQuestionModal, setShowQuestionModal] = useState(false);
@@ -117,6 +119,11 @@ export const useVideoDetail = () => {
   const videoRef = useRef(null);
 
   const openQuestionModal = () => {
+    postLearningHistory('toibox_question_edit', {
+      movie_id: videoId,
+      genre: `${genre}`,
+      question: videoState?.question,
+    });
     setShowQuestionModal(true);
   };
 
@@ -197,6 +204,11 @@ export const useVideoDetail = () => {
           stamps: [...normalStamps, currentTIme],
         }),
       );
+      postLearningHistory('stamp_put', {
+        movie_id: videoId,
+        stamp_type: 1,
+        stamp_at: currentTIme,
+      });
     }
   };
 
@@ -213,6 +225,11 @@ export const useVideoDetail = () => {
           stamps: [...goodStamps, currentTIme],
         }),
       );
+      postLearningHistory('stamp_put', {
+        movie_id: videoId,
+        stamp_type: 2,
+        stamp_at: currentTIme,
+      });
     }
   };
 
@@ -230,6 +247,11 @@ export const useVideoDetail = () => {
           stamps: [...bestStamps, currentTIme],
         }),
       );
+      postLearningHistory('stamp_put', {
+        movie_id: videoId,
+        stamp_type: 3,
+        stamp_at: currentTIme,
+      });
     }
   };
 
@@ -307,6 +329,8 @@ export const useVideoDetail = () => {
   };
 
   return {
+    videoId,
+    genre: gradeId, // TODO 古典
     videoRef,
     videoURL,
     question: videoState?.question,
