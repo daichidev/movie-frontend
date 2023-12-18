@@ -5,6 +5,7 @@ import {
   postLearningHistory,
 } from '../features/learing-history';
 import { useAuthContext } from '../utils/auth/middleware/auth/AuthContext';
+import { SKIP_HISTORY } from '../utils/env';
 
 export const useLearningHistory = () => {
   const { getCurrentUser } = useAuthContext();
@@ -13,6 +14,7 @@ export const useLearningHistory = () => {
     action: A,
     detail: Omit<LearningHistoryDetails[A], 'user_type'>,
   ) => {
+    if (SKIP_HISTORY) return;
     const user = getCurrentUser?.() || {
       user_uuid: 'test_movie',
       user_type: 9,
