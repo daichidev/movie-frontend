@@ -10,6 +10,8 @@ export type LearningAction =
   | 'stamp_delete'
   | 'stamp_view'
   | 'toibox_question_edit'
+  | 'toibox_question_edit_save'
+  | 'toibox_question_edit_cancel'
   | 'toibox_question_reset'
   | 'toibox_answer_write'
   | 'toibox_answer_clear'
@@ -72,6 +74,17 @@ export type LearningHistoryDetails = {
     movie_id: string;
     question: string;
   };
+  toibox_question_edit_save: {
+    user_type: UserType;
+    genre: string;
+    movie_id: string;
+    question: string;
+  };
+  toibox_question_edit_cancel: {
+    user_type: UserType;
+    genre: string;
+    movie_id: string;
+  };
   toibox_question_reset: {
     user_type: UserType;
     genre: string;
@@ -81,10 +94,7 @@ export type LearningHistoryDetails = {
     user_type: UserType;
     genre: string;
     movie_id: string;
-    input_type: InputType;
     question: string;
-    answer: string;
-    stroke: any[];
   };
   toibox_answer_clear: {
     user_type: UserType;
@@ -111,7 +121,7 @@ export type UserType =
 
 export type TransitionSource = any;
 
-export type InputType = 'touch' | 'keyboard' | 'software-keyboard';
+export type InputType = 'touch' | 'keyboard';
 
 export const STAMPS = {
   normal: 1,

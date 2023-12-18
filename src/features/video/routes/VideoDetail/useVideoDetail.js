@@ -119,6 +119,11 @@ export const useVideoDetail = () => {
   const videoRef = useRef(null);
 
   const openQuestionModal = () => {
+    postLearningHistory('toibox_question_edit', {
+      movie_id: videoId,
+      genre: `${genre}`,
+      question: videoState?.question,
+    });
     setShowQuestionModal(true);
   };
 

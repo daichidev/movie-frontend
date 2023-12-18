@@ -164,6 +164,8 @@ export const VideoDetail = () => {
             />
           </div>
           <QuestionBoard
+            videoId={videoId!}
+            genre={genre!}
             question={question}
             inputMode={inputMode}
             setInputMode={setInputMode}
@@ -191,6 +193,8 @@ export const VideoDetail = () => {
       </Layout>
       <WordModal wordHtml={word} onClose={closeWordModal} />
       <QuestionEditorModal
+        videoId={videoId!}
+        genre={genre!}
         isOpen={showQuestionModal}
         onClose={closeQuestionModal}
         submit={saveQuestion}
