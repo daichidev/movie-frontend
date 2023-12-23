@@ -72,8 +72,26 @@ export const VideoDetail = () => {
     text: string;
     drawing: PlotEventType[];
   }) => {
-    // TODO 文字認識処理
-    // setAnswerText('文字認識結果');
+    if (!data.drawing.length) {
+      const strokes = data.drawing.reduce<[number, number][][]>((acc, cur) => {
+        switch (cur.action) {
+          case 'begin':
+            acc.push([]);
+            break;
+          default:
+            if (cur.x != null && cur.y != null) {
+              acc[acc.length - 1].push([Math.floor(cur.x), Math.floor(cur.y)]);
+            }
+            break;
+        }
+        return acc;
+      }, []);
+      // TODO 文字認識処理
+      const result = await postCharacterRecognition({
+        strokes,
+      });
+      setAnswerText(result?.recognition || '');
+    }
   };
 
   // TODO 「問い」更新周りのサーバー連携

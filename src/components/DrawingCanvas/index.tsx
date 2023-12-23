@@ -26,7 +26,7 @@ export interface CanvasOperation {
 }
 
 export interface PlotEventType {
-  action: string;
+  action: 'begin' | 'continue' | 'end';
   x?: number | undefined;
   y?: number | undefined;
 }
@@ -140,7 +140,7 @@ const Canvas = (props: CanvasPropType) => {
     if (drawing && plotEvents.current && props.phase === 0) {
       //console.log('end');
       setDrawing(false);
-      const plotEvent = { action: 'end' };
+      const plotEvent: PlotEventType = { action: 'end' };
       //draw(mouseX ?? 0, mouseY ?? 0);
       plotEvents.current = [...plotEvents.current, plotEvent];
       props.onEndDraw(plotEvents.current);
@@ -229,7 +229,7 @@ const Canvas = (props: CanvasPropType) => {
     if (drawing && plotEvents.current && props.phase === 0) {
       //console.log('end');
       setDrawing(false);
-      const plotEvent = { action: 'end' };
+      const plotEvent: PlotEventType = { action: 'end' };
       //draw(mouseX ?? 0, mouseY ?? 0);
       plotEvents.current = [...plotEvents.current, plotEvent];
       props.onEndDraw(plotEvents.current);
