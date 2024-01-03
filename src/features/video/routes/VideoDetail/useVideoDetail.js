@@ -60,7 +60,7 @@ export const useVideoDetail = () => {
     let params = {
       grade_id: gradeId,
       unit_id: videoId,
-      category_id: 2,
+      category_id: 4,
     };
     const url =
       'http://video-streaming-api.mastercode.jp:8000/videos/get_video';

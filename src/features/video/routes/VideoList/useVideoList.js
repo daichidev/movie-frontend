@@ -9,7 +9,7 @@ export const useVideoList = () => {
 
   let params = {
     level: level + '年',
-    category_id: 2,
+    category_id: 4,
   };
   const url =
     'http://video-streaming-api.mastercode.jp:8000/grades/get_grade_id';

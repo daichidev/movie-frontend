@@ -20,6 +20,7 @@ import {
   StampType,
 } from '../../component/StampBarChart';
 import { StampForm } from '../../component/StampForm';
+import { WordList } from '../../component/WordList';
 import { WordModal } from '../../component/WordModal';
 import styles from './styles.module.scss';
 import { useVideoDetail } from './useVideoDetail';
@@ -117,15 +118,24 @@ export const VideoDetail = () => {
               <p>どうがを みて、かんじた きもちの ボタンを おしましょう。</p>
               <div className={styles.row}>
                 <div className={styles.player}>
-                  {
+                  {/* {
                     (data && data["user_uuid"] === undefined)?
                     <CustomPlayer
-                    ref={videoRef}
-                    url={videoURL}
-                    id="MainPlay"
-                    width="100%"
-                    height="100%"
+                      ref={videoRef}
+                      url={videoURL}
+                      id="MainPlay"
+                      width="100%"
+                      height="100%"
                   /> : "動画を視聴する権限がありません。"
+                  } */}
+                  {
+                    <CustomPlayer
+                      ref={videoRef}
+                      url={videoURL}
+                      id="MainPlay"
+                      width="100%"
+                      height="100%"
+                  />
                   }
                 </div>
                 <StampForm
@@ -140,15 +150,20 @@ export const VideoDetail = () => {
                 />
               </div>
             </div>
-            {
+            {/* {
               (data && data["user_uuid"] === undefined)?
-                <CustomPlayer
-                ref={videoRef}
-                url={videoURL}
-                id="MainPlay"
-                width="100%"
-                height="100%"
-              /> : ""
+                <WordList
+               className={styles['word-list']}
+               wordData={wordsData}
+               openWordModal={openWordModal}
+             /> : ""
+            } */}
+            {
+               <WordList
+               className={styles['word-list']}
+               wordData={wordsData}
+               openWordModal={openWordModal}
+             />
             }
           </div>
           <QuestionBoard
