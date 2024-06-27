@@ -1,24 +1,26 @@
+Sure, here is the translated README content in English:
+
 # movie_frontend
 
-# 動画ファイルをAWSでストリーミング(HLS形式)用に変換。
-# このプロジェクトは React.js を使用しています。
+# Convert video files to streaming format (HLS) on AWS.
+# This project uses React.js.
 
-# 開発環境の構築手順
+# Steps to set up the development environment
 
-#### １．プロジェクトをローカルにクローンします。
+#### 1. Clone the project locally.
 ```
-git clone https://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@github.com/daichidev/movie_frontend.git
+git clone https://B@github.com/daichidev/movie_frontend.git
 ```
-#### 2．プロジェクトに必要なnpmモジュールをインストールします。
+#### 2. Install the required npm modules for the project.
 ```
 npm install -g yarn
-yarn install (または yarn)
+yarn install (or just yarn)
 ```
-#### 3．プロジェクトの起動。
+#### 3. Start the project.
 ```
 npm run start
 ```
-#### 4．ビデオストリーミング部分。
+#### 4. Video streaming section.
 ```
-src/features/video/routes/VideoDetail.jsxファイルの352行に対応します。
+Corresponds to line 352 of the src/features/video/routes/VideoDetail.jsx file.
 ```
