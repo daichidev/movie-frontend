@@ -1,5 +1,3 @@
-Sure, here is the translated README content in English:
-
 # movie_frontend
 
 # Convert video files to streaming format (HLS) on AWS.
